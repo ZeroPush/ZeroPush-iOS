@@ -10,4 +10,10 @@
 
 @interface ZeroPush : NSObject
 
++(ZeroPush*) shared;
+-(void) configureWithURL:(NSURL*) zeroPushURL;
+-(void) registerForRemoteNotifications;
+-(void) registerDeviceToken:(NSData*) deviceToken;
+-(void) handleNotification:(NSDictionary*) info;
+-(void) resetBadge;
 @end
