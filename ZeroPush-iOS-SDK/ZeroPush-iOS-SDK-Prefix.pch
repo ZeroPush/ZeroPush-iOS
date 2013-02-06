@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'ZeroPush-iOS-SDK' target in the 'ZeroPush-iOS-SDK' project
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#endif
