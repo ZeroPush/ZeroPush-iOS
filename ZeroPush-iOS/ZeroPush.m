@@ -58,6 +58,36 @@
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
 }
 
+- (BOOL)shouldNotifyRegistrationError
+{
+    SEL registrationFailedSelector = @selector(tokenRegistrationDidFailWithError:);
+    return [self.delegate respondsToSelector:registrationFailedSelector];
+}
+
+- (void)notifyRegistrationError:(NSError *)error
+{
+    BOOL shouldNotifyDelegate = [self shouldNotifyRegistrationError];
+    if (error && shouldNotifyDelegate)
+    {
+        [self.delegate tokenRegistrationDidFailWithError:error];
+    }
+}
+
+- (NSDictionary *)userInfoForData:(id)data andResponse:(NSHTTPURLResponse *)response
+{
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    if (data) {
+        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        json = json == nil ? [NSNull null] : json;
+        [userInfo setObject:json forKey:@"response_data"];
+    }
+    if (response) {
+        [userInfo setObject:response forKey:@"response"];
+    }
+    // make sure not to return a mutable dictionary
+    return [NSDictionary dictionaryWithDictionary:userInfo];
+}
+
 - (void)registerDeviceToken:(NSData *)deviceToken
 {
     NSString *token = [ZeroPush deviceTokenFromData:deviceToken];
@@ -69,20 +99,15 @@
     NSMutableDictionary *requestOptions = [NSMutableDictionary dictionaryWithObject:postBody forKey:kSeriouslyBody];
     [Seriously post:registerURL options:requestOptions handler:^(id data, NSHTTPURLResponse *response, NSError *error)
     {
+        if (error) {
+            [self notifyRegistrationError:error];
+            return;
+        }
         NSInteger statusCode = [response statusCode];
-        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        if ((statusCode > 201) && [self.delegate respondsToSelector:@selector(tokenRegistrationDidFailWithError:)])
-        {
-            NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-            if (json) {
-                [userInfo setObject:json forKey:@"response_data"];
-            }
-            if (error) {
-                [userInfo setObject:error forKey:@"response_error"];
-            }
-            [userInfo setObject:response forKey:@"response"];
-            NSError *error = [NSError errorWithDomain:@"com.zeropush.api" code:statusCode userInfo:[NSDictionary dictionaryWithDictionary:userInfo]];
-            [self.delegate tokenRegistrationDidFailWithError:error];
+        if (statusCode > 201) {
+            NSDictionary *userInfo = [self userInfoForData:data andResponse:response];
+            NSError *apiError = [NSError errorWithDomain:@"com.zeropush.api" code:statusCode userInfo:userInfo];
+            [self notifyRegistrationError:apiError];
         }
     }];
 }
