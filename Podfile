@@ -1,4 +1,4 @@
-platform :ios, "5.0"
+platform :ios
 
-pod 'ADiOSUtilities'
-pod 'Seriously'
+podspec
+
