@@ -13,6 +13,7 @@
 @interface ZeroPush ()
 
 @property (nonatomic, copy) NSString *apiKey;
+@property (nonatomic, strong)NSString *deviceToken;
 
 @end
 
@@ -20,6 +21,7 @@
 
 @synthesize apiKey = _apiKey;
 @synthesize delegate = _delegate;
+@synthesize deviceToken = _deviceToken;
 
 + (ZeroPush *)shared
 {
@@ -90,10 +92,10 @@
 
 - (void)registerDeviceToken:(NSData *)deviceToken
 {
-    NSString *token = [ZeroPush deviceTokenFromData:deviceToken];
+    self.deviceToken = [ZeroPush deviceTokenFromData:deviceToken];
     NSString *registerURL = @"https://api.zeropush.com/register";
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:token forKey:@"device_token"];
+    [params setObject:self.deviceToken forKey:@"device_token"];
     [params setObject:self.apiKey forKey:@"auth_token"];
     NSData *postBody = [NSData formEncodedDataFor:params];
     NSMutableDictionary *requestOptions = [NSMutableDictionary dictionaryWithObject:postBody forKey:kSeriouslyBody];
