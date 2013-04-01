@@ -32,4 +32,6 @@
 
 - (void)registerDeviceToken:(NSData *) deviceToken;
 
+- (void)resetBadge;
+
 @end

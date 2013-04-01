@@ -114,4 +114,27 @@
     }];
 }
 
+-(void)resetBadge
+{
+    // reset the device's badge
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+
+    // tell the api the badge has been reset
+    if (self.deviceToken) {
+        NSString *registerURL = @"https://api.zeropush.com/reset_badge";
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:self.deviceToken forKey:@"device_token"];
+        [params setObject:self.apiKey forKey:@"auth_token"];
+        NSData *postBody = [NSData formEncodedDataFor:params];
+        NSMutableDictionary *requestOptions = [NSMutableDictionary dictionaryWithObject:postBody forKey:kSeriouslyBody];
+        [Seriously post:registerURL options:requestOptions handler:^(id data, NSHTTPURLResponse *response, NSError *error)
+        {
+            if (error) {
+                NSLog(@"ZeroPush experienced an error resetting the device's badge.");
+                return;
+            }
+        }];
+    }
+}
+
 @end
