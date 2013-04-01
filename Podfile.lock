@@ -7,7 +7,7 @@ PODS:
 - ADiOSUtilities/ADFoundationAdditions (1.0.0)
 - ADiOSUtilities/ADHelpers (1.0.0)
 - ADiOSUtilities/ADUIKitAdditions (1.0.0)
-- Seriously (0.0.1)
+- Seriously (2.0.0)
 
 DEPENDENCIES:
 - ADiOSUtilities
@@ -18,6 +18,6 @@ SPEC CHECKSUMS:
   ADiOSUtilities/ADFoundationAdditions: 0469444f57d6ecfcf9e35419131af50803d46e5c
   ADiOSUtilities/ADHelpers: 0469444f57d6ecfcf9e35419131af50803d46e5c
   ADiOSUtilities/ADUIKitAdditions: 0469444f57d6ecfcf9e35419131af50803d46e5c
-  Seriously: 307c1aedb8de774e7e0c0407bfb43312f18c89f0
+  Seriously: e69b14ea5fb0ccdf1b62060e22f461d5e2a1603d
 
 COCOAPODS: 0.16.4
