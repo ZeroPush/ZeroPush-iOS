@@ -125,7 +125,7 @@
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         [params setObject:self.deviceToken forKey:@"device_token"];
         [params setObject:self.apiKey forKey:@"auth_token"];
-        [params setObject:[NSNumber numberWithInteger:badge] forKey:@"badge"];
+        [params setObject:[NSString stringWithFormat:@"%d", badge] forKey:@"badge"];
         NSData *postBody = [NSData formEncodedDataFor:params];
         NSMutableDictionary *requestOptions = [NSMutableDictionary dictionaryWithObject:postBody forKey:kSeriouslyBody];
         [Seriously post:registerURL options:requestOptions handler:^(id data, NSHTTPURLResponse *response, NSError *error)
