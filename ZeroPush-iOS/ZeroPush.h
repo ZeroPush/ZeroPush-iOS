@@ -20,16 +20,34 @@
 
 @property (nonatomic, assign) id<ZeroPushDelegate> delegate;
 
-+ (ZeroPush*) shared;
+/**
+ * Get the shared ZeroPush instance
+ */
++ (ZeroPush *) shared;
 
+/**
+ * Set the shared ZeroPush instance's apiKey
+ */
 + (void)engageWithAPIKey:(NSString *)apiKey;
 
+/**
+ * Set the shared ZeroPush instance's apiKey and specify a ZeroPushDelegate
+ */
 + (void)engageWithAPIKey:(NSString *)apiKey delegate:(id<ZeroPushDelegate>)delegate;
 
+/**
+ * Parse a device token given the raw data returned by Apple from registering for notifications
+ */
 + (NSString *)deviceTokenFromData:(NSData *)tokenData;
 
+/**
+ * A convenience wrapper for [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
+ */
 - (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
 
+/**
+ * Register the device's token with ZeroPush
+ */
 - (void)registerDeviceToken:(NSData *) deviceToken;
 
 /**
