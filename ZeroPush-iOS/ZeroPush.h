@@ -32,6 +32,14 @@
 
 - (void)registerDeviceToken:(NSData *) deviceToken;
 
+/**
+ * Set the device's badge number to the given value
+ */
+- (void)setBadge:(NSInteger)badge;
+
+/**
+ * Set the device's badge number to zero
+ */
 - (void)resetBadge;
 
 @end
