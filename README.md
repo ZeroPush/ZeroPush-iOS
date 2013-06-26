@@ -1,4 +1,4 @@
-[![ZeroPush](https://zeropush.com/zeropush-docs-header.png)](https://zeropush.com)
+[![ZeroPush](https://raw.github.com/SymmetricInfinity/ZeroPush-iOS/master/zeropush-docs-header.png)](https://zeropush.com)
 
 Purpose:
 ---
