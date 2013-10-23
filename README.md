@@ -14,7 +14,7 @@ We recommend using the [ZeroPush Cocoapod](http://cocoapods.org/?q=zeropush).
 In your `Podfile` add the following line:
 
 ```ruby
-pod 'ZeroPush', '~> 1.0.1'
+pod 'ZeroPush', '~> 1.1.0'
 ```
 
 and install the Pods

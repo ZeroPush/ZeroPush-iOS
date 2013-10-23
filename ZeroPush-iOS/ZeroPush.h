@@ -13,6 +13,9 @@
 @optional
 
 - (void)tokenRegistrationDidFailWithError:(NSError *)error;
+- (void)subscribeDidFailWithError:(NSError *)error;
+- (void)unsubscribeDidFailWithError:(NSError *)error;
+- (void)setBadgeDidFailWithError:(NSError *)error;
 
 @end
 
@@ -23,7 +26,7 @@
 /**
  * Get the shared ZeroPush instance
  */
-+ (ZeroPush *) shared;
++ (ZeroPush *)shared;
 
 /**
  * Set the shared ZeroPush instance's apiKey
@@ -48,7 +51,22 @@
 /**
  * Register the device's token with ZeroPush
  */
-- (void)registerDeviceToken:(NSData *) deviceToken;
+- (void)registerDeviceToken:(NSData *)deviceToken;
+
+/**
+ * Register the device's token with ZeroPush and subscribe the device's token to a broadcast channel
+ */
+- (void)registerDeviceToken:(NSData *)deviceToken channel:(NSString *)channel;
+
+/**
+ * Subscribe the device's token to a broadcast channel
+ */
+- (void)subscribeToChannel:(NSString *)channel;
+
+/**
+ * Unsubscribe the device's token from a broadcast channel
+ */
+- (void)unsubscribeFromChannel:(NSString *)channel;
 
 /**
  * Set the device's badge number to the given value

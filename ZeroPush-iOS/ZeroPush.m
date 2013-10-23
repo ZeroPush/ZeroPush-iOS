@@ -60,21 +60,6 @@
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
 }
 
-- (BOOL)shouldNotifyRegistrationError
-{
-    SEL registrationFailedSelector = @selector(tokenRegistrationDidFailWithError:);
-    return [self.delegate respondsToSelector:registrationFailedSelector];
-}
-
-- (void)notifyRegistrationError:(NSError *)error
-{
-    BOOL shouldNotifyDelegate = [self shouldNotifyRegistrationError];
-    if (error && shouldNotifyDelegate)
-    {
-        [self.delegate tokenRegistrationDidFailWithError:error];
-    }
-}
-
 - (NSDictionary *)userInfoForData:(id)data andResponse:(NSHTTPURLResponse *)response
 {
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
@@ -92,26 +77,40 @@
 
 - (void)registerDeviceToken:(NSData *)deviceToken
 {
+    [self registerDeviceToken:deviceToken channel:nil];
+}
+
+- (void)registerDeviceToken:(NSData *)deviceToken channel:(NSString *)channel
+{
     self.deviceToken = [ZeroPush deviceTokenFromData:deviceToken];
-    NSString *registerURL = @"https://api.zeropush.com/register";
+    NSString *url = @"https://api.zeropush.com/register";
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:self.deviceToken forKey:@"device_token"];
     [params setObject:self.apiKey forKey:@"auth_token"];
-    NSData *postBody = [NSData formEncodedDataFor:params];
-    NSMutableDictionary *requestOptions = [NSMutableDictionary dictionaryWithObject:postBody forKey:kSeriouslyBody];
-    [Seriously post:registerURL options:requestOptions handler:^(id data, NSHTTPURLResponse *response, NSError *error)
-    {
-        if (error) {
-            [self notifyRegistrationError:error];
-            return;
-        }
-        NSInteger statusCode = [response statusCode];
-        if (statusCode > 201) {
-            NSDictionary *userInfo = [self userInfoForData:data andResponse:response];
-            NSError *apiError = [NSError errorWithDomain:@"com.zeropush.api" code:statusCode userInfo:userInfo];
-            [self notifyRegistrationError:apiError];
-        }
-    }];
+    if (channel) {
+        [params setObject:channel forKey:@"channel"];
+    }
+    [self performPostRequest:url params:params errorSelector:@selector(tokenRegistrationDidFailWithError:)];
+}
+
+- (void)subscribeToChannel:(NSString *)channel;
+{
+    NSString *url = @"https://api.zeropush.com/subscribe";
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:self.deviceToken forKey:@"device_token"];
+    [params setObject:self.apiKey forKey:@"auth_token"];
+    [params setObject:channel forKey:@"channel"];
+    [self performPostRequest:url params:params errorSelector:@selector(subscribeDidFailWithError:)];
+}
+
+- (void)unsubscribeFromChannel:(NSString *)channel;
+{
+    NSString *url = @"https://api.zeropush.com/unsubscribe";
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:self.deviceToken forKey:@"device_token"];
+    [params setObject:self.apiKey forKey:@"auth_token"];
+    [params setObject:channel forKey:@"channel"];
+    [self performPostRequest:url params:params errorSelector:@selector(unsubscribeDidFailWithError:)];
 }
 
 - (void)setBadge:(NSInteger)badge
@@ -120,26 +119,51 @@
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:badge];
 
     // tell the api the badge has been reset
-    if (self.deviceToken) {
-        NSString *registerURL = @"https://api.zeropush.com/set_badge";
-        NSMutableDictionary *params = [NSMutableDictionary dictionary];
-        [params setObject:self.deviceToken forKey:@"device_token"];
-        [params setObject:self.apiKey forKey:@"auth_token"];
-        [params setObject:[NSString stringWithFormat:@"%d", badge] forKey:@"badge"];
-        NSData *postBody = [NSData formEncodedDataFor:params];
-        NSMutableDictionary *requestOptions = [NSMutableDictionary dictionaryWithObject:postBody forKey:kSeriouslyBody];
-        [Seriously post:registerURL options:requestOptions handler:^(id data, NSHTTPURLResponse *response, NSError *error)
-        {
-            if (error) {
-                NSLog(@"ZeroPush experienced an error resetting the device's badge.");
-                return;
-            }
-        }];
-    }
+    NSString *url = @"https://api.zeropush.com/set_badge";
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:self.deviceToken forKey:@"device_token"];
+    [params setObject:self.apiKey forKey:@"auth_token"];
+    [params setObject:[NSString stringWithFormat:@"%d", badge] forKey:@"badge"];
+    [self performPostRequest:url params:params errorSelector:@selector(setBadgeDidFailWithError:)];
 }
 
 - (void)resetBadge
 {
+    if (_deviceToken == nil) {
+        return;
+    }
     [self setBadge:0];
 }
+
+- (void)performPostRequest:(NSString *)url params:(NSDictionary *)params errorSelector:(SEL)errorSelector
+{
+    NSData *postBody = [NSData formEncodedDataFor:params];
+    NSMutableDictionary *requestOptions = [NSMutableDictionary dictionaryWithObject:postBody forKey:kSeriouslyBody];
+    [Seriously post:url options:requestOptions handler:^(id data, NSHTTPURLResponse *response, NSError *error)
+     {
+         if (![self.delegate respondsToSelector:errorSelector]) {
+             return;
+         }
+         if (error) {
+             [self.delegate performSelector:errorSelector withObject:error];
+             return;
+         }
+         NSInteger statusCode = [response statusCode];
+         if (statusCode > 201) {
+             NSDictionary *userInfo = [self userInfoForData:data andResponse:response];
+             NSError *apiError = [NSError errorWithDomain:@"com.zeropush.api" code:statusCode userInfo:userInfo];
+             [self.delegate performSelector:errorSelector withObject:apiError];
+         }
+     }];
+
+}
+
+- (NSString *)deviceToken
+{
+    if (_deviceToken == nil) {
+        return @"";
+    }
+    return _deviceToken;
+}
+
 @end
