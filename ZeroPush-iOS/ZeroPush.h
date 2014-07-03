@@ -3,7 +3,7 @@
 //  ZeroPush-iOS
 //
 //  Created by Stefan Natchev on 2/5/13.
-//  Copyright (c) 2013 SymmetricInfinity. All rights reserved.
+//  Copyright (c) 2014 SymmetricInfinity. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
