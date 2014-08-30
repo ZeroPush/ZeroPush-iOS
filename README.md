@@ -31,7 +31,7 @@ After the client library has been installed, add the following to your `AppDeleg
 // In your application delegate
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [ZeroPush engageWithAPIKey:@"your-zeropush-auth-token" delegate:self];
+    [ZeroPush engageWithAPIKey:@"your-zeropush-app-token" delegate:self];
     [[ZeroPush shared] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert |
                                                            UIRemoteNotificationTypeBadge |
                                                            UIRemoteNotificationTypeSound)];
@@ -45,6 +45,12 @@ After the client library has been installed, add the following to your `AppDeleg
     // This would be a good time to save the token and associate it with a user that you want to notify later.
     NSString *tokenString = [ZeroPush deviceTokenFromData:tokenData];
     NSLog(@"%@", tokenString);
+}
+
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+{
+    //common problems include: not having your provisioning profile configured for apns, or mismatching bundle identifiers
+    NSLog(@"%@", error.localizedDescription);
 }
 ```
 
