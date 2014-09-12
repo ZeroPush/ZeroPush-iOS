@@ -154,6 +154,8 @@
     [self performDeleteRequest:url params:params errorSelector:@selector(unsubscribeDidFailWithError:)];
 }
 
+#pragma mark - HTTP requests
+
 - (void)performPostRequest:(NSString *)url params:(NSDictionary *)params errorSelector:(SEL)errorSelector
 {
     NSData *postBody = [NSData formEncodedDataFor:params];
@@ -174,10 +176,27 @@
              [self.delegate performSelector:errorSelector withObject:apiError];
          }
      }];
-
 }
 
+- (void)performDeleteRequest:(NSString *)url params:(NSDictionary *)params errorSelector:(SEL)errorSelector
 {
+    NSData *postBody = [NSData formEncodedDataFor:params];
+    NSMutableDictionary *requestOptions = [NSMutableDictionary dictionaryWithObject:postBody forKey:kSeriouslyBody];
+    [Seriously delete:url options:requestOptions handler:^(id data, NSHTTPURLResponse *response, NSError *error)
+     {
+         if (![self.delegate respondsToSelector:errorSelector]) {
+             return;
+         }
+         if (error) {
+             [self.delegate performSelector:errorSelector withObject:error];
+             return;
+         }
+         NSInteger statusCode = [response statusCode];
+         if (statusCode > 201) {
+             NSDictionary *userInfo = [self userInfoForData:data andResponse:response];
+             NSError *apiError = [NSError errorWithDomain:@"com.zeropush.api" code:statusCode userInfo:userInfo];
+             [self.delegate performSelector:errorSelector withObject:apiError];
+         }
+     }];
 }
-
 @end
