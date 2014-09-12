@@ -10,13 +10,6 @@
 #import "Seriously.h"
 #import "NSData+FormEncoding.h"
 
-@interface ZeroPush ()
-
-@property (nonatomic, copy) NSString *apiKey;
-@property (nonatomic, strong)NSString *deviceToken;
-
-@end
-
 @implementation ZeroPush
 
 @synthesize apiKey = _apiKey;
@@ -56,8 +49,20 @@
 
 - (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
 {
-    //TODO: possibly hang on to the types
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
+}
+
+- (void)registerForRemoteNotifications
+{
+#ifndef __IPHONE_7_0
+    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert |
+                                                                           UIRemoteNotificationTypeBadge |
+                                                                           UIRemoteNotificationTypeSound)];
+#endif
+
+#ifdef __IPHONE_8_0
+        [[UIApplication sharedApplication] registerForRemoteNotifications];
+#endif
 }
 
 - (NSDictionary *)userInfoForData:(id)data andResponse:(NSHTTPURLResponse *)response
@@ -93,25 +98,9 @@
     [self performPostRequest:url params:params errorSelector:@selector(tokenRegistrationDidFailWithError:)];
 }
 
-- (void)subscribeToChannel:(NSString *)channel;
 {
-    NSString *url = @"https://api.zeropush.com/subscribe";
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:self.deviceToken forKey:@"device_token"];
-    [params setObject:self.apiKey forKey:@"auth_token"];
-    [params setObject:channel forKey:@"channel"];
-    [self performPostRequest:url params:params errorSelector:@selector(subscribeDidFailWithError:)];
 }
 
-- (void)unsubscribeFromChannel:(NSString *)channel;
-{
-    NSString *url = @"https://api.zeropush.com/unsubscribe";
-    NSMutableDictionary *params = [NSMutableDictionary dictionary];
-    [params setObject:self.deviceToken forKey:@"device_token"];
-    [params setObject:self.apiKey forKey:@"auth_token"];
-    [params setObject:channel forKey:@"channel"];
-    [self performPostRequest:url params:params errorSelector:@selector(unsubscribeDidFailWithError:)];
-}
 
 - (void)setBadge:(NSInteger)badge
 {
@@ -133,6 +122,36 @@
         return;
     }
     [self setBadge:0];
+}
+
+- (NSString *)deviceToken
+{
+    if (_deviceToken == nil) {
+        return @"";
+    }
+    return _deviceToken;
+}
+
+#pragma mark - Channels
+
+- (void)subscribeToChannel:(NSString *)channel;
+{
+    NSString *url = @"https://api.zeropush.com/subscribe";
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:self.deviceToken forKey:@"device_token"];
+    [params setObject:self.apiKey forKey:@"auth_token"];
+    [params setObject:channel forKey:@"channel"];
+    [self performPostRequest:url params:params errorSelector:@selector(subscribeDidFailWithError:)];
+}
+
+- (void)unsubscribeFromChannel:(NSString *)channel;
+{
+    NSString *url = @"https://api.zeropush.com/subscribe";
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:self.deviceToken forKey:@"device_token"];
+    [params setObject:self.apiKey forKey:@"auth_token"];
+    [params setObject:channel forKey:@"channel"];
+    [self performDeleteRequest:url params:params errorSelector:@selector(unsubscribeDidFailWithError:)];
 }
 
 - (void)performPostRequest:(NSString *)url params:(NSDictionary *)params errorSelector:(SEL)errorSelector
@@ -158,12 +177,7 @@
 
 }
 
-- (NSString *)deviceToken
 {
-    if (_deviceToken == nil) {
-        return @"";
-    }
-    return _deviceToken;
 }
 
 @end
