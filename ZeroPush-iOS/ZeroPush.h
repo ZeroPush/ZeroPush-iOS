@@ -21,6 +21,9 @@
 
 @interface ZeroPush : NSObject
 
+@property (nonatomic, copy) NSString *apiKey;
+@property (nonatomic, strong)NSString *deviceToken;
+
 @property (nonatomic, assign) id<ZeroPushDelegate> delegate;
 
 /**
@@ -45,8 +48,14 @@
 
 /**
  * A convenience wrapper for [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
+ * deprecated in iOS7
  */
 - (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
+
+/**
+ * Preferred method for registering for notifications. Backwards compatible with iOS7
+ */
+- (void)registerForRemoteNotifications;
 
 /**
  * Register the device's token with ZeroPush
@@ -57,6 +66,8 @@
  * Register the device's token with ZeroPush and subscribe the device's token to a broadcast channel
  */
 - (void)registerDeviceToken:(NSData *)deviceToken channel:(NSString *)channel;
+
+- (void)unregisterDeviceToken;
 
 /**
  * Subscribe the device's token to a broadcast channel
