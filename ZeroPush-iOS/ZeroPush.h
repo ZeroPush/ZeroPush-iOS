@@ -23,6 +23,7 @@
 
 @property (nonatomic, copy) NSString *apiKey;
 @property (nonatomic, strong)NSString *deviceToken;
+@property (nonatomic, strong)NSHTTPURLResponse *lastResponse;
 
 @property (nonatomic, assign) id<ZeroPushDelegate> delegate;
 
@@ -78,6 +79,17 @@
  * Unsubscribe the device's token from a broadcast channel
  */
 - (void)unsubscribeFromChannel:(NSString *)channel;
+
+- (void)unsubscribeFromAllChannels;
+
+/**
+ * return a list of all the channels to which the device is subscribed
+ */
+- (NSArray *)channels;
+/**
+ * set a list of the channels to which a device is subscribed
+ */
+- (void)setChannels:(NSArray*)channels;
 
 /**
  * Set the device's badge number to the given value
