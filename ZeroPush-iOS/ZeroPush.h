@@ -68,8 +68,6 @@
  */
 - (void)registerDeviceToken:(NSData *)deviceToken channel:(NSString *)channel;
 
-- (void)unregisterDeviceToken;
-
 /**
  * Subscribe the device's token to a broadcast channel
  */
@@ -85,7 +83,7 @@
 /**
  * return a list of all the channels to which the device is subscribed
  */
-- (NSArray *)channels;
+- (void)getChannels:(void (^)(NSArray *channels, NSError *error)) callback;
 /**
  * set a list of the channels to which a device is subscribed
  */
