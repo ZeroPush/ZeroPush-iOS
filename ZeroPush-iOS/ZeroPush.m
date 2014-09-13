@@ -112,7 +112,7 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:self.deviceToken forKey:@"device_token"];
     [params setObject:self.apiKey forKey:@"auth_token"];
-    [params setObject:[NSString stringWithFormat:@"%d", badge] forKey:@"badge"];
+    [params setObject:[NSString stringWithFormat:@"%ld", badge] forKey:@"badge"];
     [self performPostRequest:url params:params errorSelector:@selector(setBadgeDidFailWithError:)];
 }
 
