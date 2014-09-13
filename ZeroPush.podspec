@@ -10,7 +10,5 @@ Pod::Spec.new do |s|
   s.source_files = 'ZeroPush-iOS/*.{h,m}'
   s.frameworks   = 'Foundation', 'UIKit'
   s.requires_arc = true
-  s.dependency 'Seriously', '~> 2.0.0'
-  s.dependency 'ADiOSUtilities', '~> 1.0.0'
 end
 

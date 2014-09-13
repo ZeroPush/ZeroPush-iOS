@@ -1,23 +1,13 @@
-
 PODS:
-- ADiOSUtilities (1.0.0):
-  - ADiOSUtilities/ADFoundationAdditions (= 1.0.0)
-  - ADiOSUtilities/ADHelpers (= 1.0.0)
-  - ADiOSUtilities/ADUIKitAdditions (= 1.0.0)
-- ADiOSUtilities/ADFoundationAdditions (1.0.0)
-- ADiOSUtilities/ADHelpers (1.0.0)
-- ADiOSUtilities/ADUIKitAdditions (1.0.0)
-- Seriously (2.0.0)
+  - Kiwi (2.3.0)
+  - Nocilla (0.8.1)
 
 DEPENDENCIES:
-- ADiOSUtilities
-- Seriously
+  - Kiwi
+  - Nocilla
 
 SPEC CHECKSUMS:
-  ADiOSUtilities: 0469444f57d6ecfcf9e35419131af50803d46e5c
-  ADiOSUtilities/ADFoundationAdditions: 0469444f57d6ecfcf9e35419131af50803d46e5c
-  ADiOSUtilities/ADHelpers: 0469444f57d6ecfcf9e35419131af50803d46e5c
-  ADiOSUtilities/ADUIKitAdditions: 0469444f57d6ecfcf9e35419131af50803d46e5c
-  Seriously: e69b14ea5fb0ccdf1b62060e22f461d5e2a1603d
+  Kiwi: 54bece5b35564d9b8e03c608d926f1a22fcfc589
+  Nocilla: e573c2bf9113c8d77782b695a2f9362b7bc44e72
 
-COCOAPODS: 0.16.4
+COCOAPODS: 0.33.1
