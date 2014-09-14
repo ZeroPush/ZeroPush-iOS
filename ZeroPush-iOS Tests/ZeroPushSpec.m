@@ -52,29 +52,24 @@
 SPEC_BEGIN(ZeroPushSpec)
 
 describe(@"ZeroPush", ^{
-    
-    let(application, ^{
-        return [[TestApplication alloc] init];
-    });
+    __block id application = [[TestApplication alloc] init];
+
     let(deviceToken, ^{
         return [NSData dataWithHexString:@"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"];
     });
-    let(zeroPush, ^{
-        return [ZeroPush shared];
-    });
-    
+
     beforeAll(^{
         [ZeroPush engageWithAPIKey:@"testing" delegate:application];
-//        [[LSNocilla sharedInstance] start];
+        [[LSNocilla sharedInstance] start];
     });
-    
+
     afterAll(^{
-//        [[LSNocilla sharedInstance] stop];
+        [[LSNocilla sharedInstance] stop];
     });
     afterEach(^{
-//        [[LSNocilla sharedInstance] clearStubs];
+        [[LSNocilla sharedInstance] clearStubs];
     });
-    
+
     //context(@"registerForRemoteNotifications");
 
     context(@"registerDeviceToken", ^{
@@ -83,19 +78,18 @@ describe(@"ZeroPush", ^{
             withHeaders(@{ @"Content-Type": @"application/json" }).
             withBody(@"{\"auth_token\":\"testing\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
             
-            [zeroPush registerDeviceToken:deviceToken];
-            [[[zeroPush deviceToken] should] equal:@"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"];
-            [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
-
+            [[ZeroPush shared] registerDeviceToken:deviceToken];
+            [[[[ZeroPush shared] deviceToken] should] equal:@"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"];
+            [[expectFutureValue([ZeroPush shared].lastResponse) shouldEventually] beNonNil];
         });
-        
+
         it(@"should register with a device token and subscribe it to a channel", ^{
             stubRequest(@"POST", @"https://api.zeropush.com/register").
             withHeaders(@{ @"Content-Type": @"application/json" }).
             withBody(@"{\"auth_token\":\"testing\",\"channel\":\"testing-channel\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
             
-            [zeroPush registerDeviceToken:deviceToken channel:@"testing-channel"];
-            [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
+            [[ZeroPush shared] registerDeviceToken:deviceToken channel:@"testing-channel"];
+            [[expectFutureValue([ZeroPush shared].lastResponse) shouldEventually] beNonNil];
         });
 
         it(@"should call the error selector if an error happens", ^{
@@ -103,25 +97,101 @@ describe(@"ZeroPush", ^{
             withHeaders(@{ @"Content-Type": @"application/json" }).
             withBody(@"{\"auth_token\":\"testing\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}").
             andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
-            
-            [zeroPush registerDeviceToken:deviceToken];
-            [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
+
+            [[ZeroPush shared] registerDeviceToken:deviceToken];
+            [[expectFutureValue(application) shouldEventually] receive:@selector(tokenRegistrationDidFailWithError:)];
         });
     });
-/*
-    context(@"unregisterDeviceToken");
+     
+    context(@"subscribeToChannel", ^{
+        it(@"should add a new channel to the channel subscriptions", ^{
+            stubRequest(@"POST", @"https://api.zeropush.com/subscribe").
+            withHeaders(@{ @"Content-Type": @"application/json" }).
+            withBody(@"{\"auth_token\":\"testing\",\"channel\":\"player-1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+            [[ZeroPush shared] subscribeToChannel:@"player-1"];
+            [[expectFutureValue([ZeroPush shared].lastResponse) shouldEventually] beNonNil];
+        });
+    });
     
-    context(@"subscribeToChannl");
-    context(@"unsubscribeFromChannel");
-    context(@"unsubscribeFromAllChannels");
-    context(@"channels");
-    context(@"setChannels");
+    context(@"unsubscribeFromChannel", ^{
+        it(@"should remove a channel from the channel subscriptions", ^{
+            stubRequest(@"DELETE", @"https://api.zeropush.com/subscribe").
+            withHeaders(@{ @"Content-Type": @"application/json" }).
+            withBody(@"{\"auth_token\":\"testing\",\"channel\":\"player-1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+            
+            [[ZeroPush shared] unsubscribeFromChannel:@"player-1"];
+            [[expectFutureValue([ZeroPush shared].lastResponse) shouldEventually] beNonNil];
+        });
+    });
     
-    context(@"setBadge");
-    context(@"resetBadge");
+    context(@"unsubscribeFromAllChannels", ^{
+        it(@"should remove all channels", ^{
+            stubRequest(@"PUT", @"https://api.zeropush.com/device/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
+            withHeaders(@{ @"Content-Type": @"application/json" }).
+            withBody(@"{\"channel_list\":\"\",\"auth_token\":\"testing\"}");
+            [[ZeroPush shared] unsubscribeFromAllChannels];
+            [[expectFutureValue([ZeroPush shared].lastResponse) shouldEventually] beNonNil];
+        });
+    });
+
+    context(@"getChannels", ^{
+        it(@"should invoke the callback with the channels", ^{
+            __block NSArray *fetchedChannels = nil;
+
+            stubRequest(@"GET", @"https://api.zeropush.com/device/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
+            withHeaders(@{ @"Content-Type": @"application/json" }).
+            withBody(@"{\"auth_token\":\"testing\"}").
+            andReturn(200).
+            withBody(@"{\"channels\":[\"player-1\"]}");
+
+            [[ZeroPush shared] getChannels:^(NSArray *channels, NSError *error) {
+                fetchedChannels = channels;
+            }];
+
+            [[expectFutureValue(fetchedChannels) shouldEventually] haveCountOf:1];
+        });
+//        it(@"should invoke the callback with an error");
+    });
     
-    context(@"error callbacks");
-*/
+    context(@"setChannels", ^{
+        it(@"should make a request to set channels", ^{
+            stubRequest(@"PUT", @"https://api.zeropush.com/device/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
+            withHeaders(@{ @"Content-Type": @"application/json" }).
+            withBody(@"{\"channel_list\":\"player-1,game-12\",\"auth_token\":\"testing\"}");
+
+            [[ZeroPush shared] setChannels:@[@"player-1", @"game-12"]];
+            [[expectFutureValue([ZeroPush shared].lastResponse) shouldEventually] beNonNil];
+        });
+    });
+    
+    context(@"setBadge", ^{
+        it(@"should make a request to set badge", ^{
+            stubRequest(@"POST", @"https://api.zeropush.com/set_badge").
+            withHeaders(@{ @"Content-Type": @"application/json" }).
+            withBody(@"{\"auth_token\":\"testing\",\"badge\":\"1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+
+            [[ZeroPush shared] setBadge:1];
+            [[expectFutureValue([ZeroPush shared].lastResponse) shouldEventually] beNonNil];
+        });
+    });
+
+    context(@"resetBadge", ^{
+        it(@"should make a request to set the badge to 0", ^{
+            stubRequest(@"POST", @"https://api.zeropush.com/set_badge").
+            withHeaders(@{ @"Content-Type": @"application/json" }).
+            withBody(@"{\"auth_token\":\"testing\",\"badge\":\"0\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+            [[ZeroPush shared] resetBadge];
+            [[expectFutureValue([ZeroPush shared].lastResponse) shouldEventually] beNonNil];
+        });
+    });
+
+    /*
+    context(@"verifyCredentials", ^{
+        it(@"should verify the credentials of the token", ^{
+            [[[[ZeroPush shared] verifyCredentials] should] beTrue];
+        });
+    });
+     */
 });
 
 SPEC_END

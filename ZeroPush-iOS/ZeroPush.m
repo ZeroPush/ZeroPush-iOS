@@ -7,8 +7,6 @@
 //
 
 #import "ZeroPush.h"
-#import "Seriously.h"
-#import "NSData+FormEncoding.h"
 
 static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 //static NSString *const ZeroPushAPIURLHost = @"http://localhost:3000/api";
@@ -18,6 +16,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 - (void)HTTPRequest:(NSString *) verb url:(NSString *)url params:(NSDictionary *)params completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler;
 - (void)HTTPRequest:(NSString *) verb url:(NSString *)url completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler;
 
+- (NSString*) apiPath:(NSString *)path, ... NS_REQUIRES_NIL_TERMINATION;
 @end
 
 @implementation ZeroPush
@@ -65,14 +64,12 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
 - (void)registerForRemoteNotifications
 {
-#ifndef __IPHONE_7_0
+#ifdef __IPHONE_8_0
+    [[UIApplication sharedApplication] registerForRemoteNotifications];
+#else
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert |
                                                                            UIRemoteNotificationTypeBadge |
                                                                            UIRemoteNotificationTypeSound)];
-#endif
-
-#ifdef __IPHONE_8_0
-        [[UIApplication sharedApplication] registerForRemoteNotifications];
 #endif
 }
 
@@ -107,23 +104,11 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     if (channel) {
         [params setObject:channel forKey:@"channel"];
     }
-/*
+
     [self HTTPRequest:@"POST"
-                  url:[self urlFromPath:@"register"]
+                  url:[self apiPath:@"register", nil]
                params:params
         errorSelector:@selector(tokenRegistrationDidFailWithError:)];
-*/
-    [self HTTPRequest:@"POST"
-                  url:[self urlFromPath:@"register"]
-               params:params
-    completionHandler:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
-        NSLog(@"Here");
-    }];
-}
-
-- (void)unregisterDeviceToken
-{
-    //[self performDeleteRequest:@"https://api.zeropush.com/" params:params errorSelector:<#(SEL)#>]
 }
 
 - (void)setBadge:(NSInteger)badge
@@ -138,7 +123,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     [params setObject:[NSString stringWithFormat:@"%ld", badge] forKey:@"badge"];
 
     [self HTTPRequest:@"POST"
-                  url:[self urlFromPath:@"set_badge"]
+                  url:[self apiPath:@"set_badge", nil]
                params:params
         errorSelector:@selector(setBadgeDidFailWithError:)];
 }
@@ -159,8 +144,6 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     return _deviceToken;
 }
 
-#pragma mark - Channels
-
 - (void)subscribeToChannel:(NSString *)channel;
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
@@ -169,7 +152,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     [params setObject:channel forKey:@"channel"];
 
     [self HTTPRequest:@"POST"
-                  url:[self urlFromPath:@"subscribe"]
+                  url:[self apiPath:@"subscribe", nil]
                params:params
         errorSelector:@selector(subscribeDidFailWithError:)];
 }
@@ -181,30 +164,51 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     [params setObject:self.apiKey forKey:@"auth_token"];
     [params setObject:channel forKey:@"channel"];
 
-    [self HTTPRequest:@"DELETE" url:[self urlFromPath:@"subscribe"]
+    [self HTTPRequest:@"DELETE"
+                  url:[self apiPath:@"subscribe", nil]
                params:params
         errorSelector:@selector(unsubscribeDidFailWithError:)];
 }
 
-/*
-- (NSArray *)channels
+-(void)unsubscribeFromAllChannels
 {
-    NSString *url = @"https://api.zeropush.com/device/{device_token}";
+    [self HTTPRequest:@"PUT"
+                  url:[self apiPath:@"device", self.deviceToken, nil]
+               params:@{@"auth_token": self.apiKey, @"channel_list": @""}
+        errorSelector:@selector(unsubscribeDidFailWithError:)];
+}
+
+- (void)getChannels:(void (^)(NSArray *channels, NSError *error)) callback
+{
+    [self HTTPRequest:@"GET"
+                  url:[self apiPath:@"device", self.deviceToken, nil]
+               params:@{@"auth_token": self.apiKey}
+    completionHandler:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
+        if(connectionError) {
+            return callback(nil, connectionError);
+        }
+
+        NSError *error;
+        NSArray *channels = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        callback(channels, error);
+    }];
 }
 
 -(void)setChannels:(NSArray *)channels
 {
+    [self HTTPRequest:@"PUT"
+                  url:[self apiPath:@"device", self.deviceToken, nil]
+               params:@{@"auth_token": self.apiKey, @"channel_list": [channels componentsJoinedByString:@","]}
+        errorSelector:@selector(subscribeDidFailWithError:)];
 }
 
--(void)unsubscribeFromAllChannels
-{
-}
-*/
 
 #pragma mark - HTTP Requests
 
 -(void)HTTPRequest:(NSString *) verb url:(NSString *)url params:(NSDictionary *)params completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler
 {
+    self.lastResponse = nil;    //clear out the response
+    
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     request.HTTPMethod = verb;
 
@@ -216,7 +220,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     }
 
-    //NOTE: Consider queue
+    //NOTE: Consider queue, availability?
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue currentQueue]
                            completionHandler:^(NSURLResponse *urlResponse, NSData *data, NSError *error) {
@@ -234,7 +238,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 -(void)HTTPRequest:(NSString *)verb url:(NSString *)url params:(NSDictionary *)params errorSelector:(SEL)errorSelector
 {
     [self HTTPRequest:verb url:url params:params completionHandler:^(NSHTTPURLResponse *response, NSData *data, NSError *error) {
-        
+
         if (![self.delegate respondsToSelector:errorSelector]) {
             return;
         }
@@ -243,6 +247,9 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
             return;
         }
         NSInteger statusCode = [response statusCode];
+
+        //if 300, we need to manually follow redirects
+        
         if (statusCode >= 400) {
             NSDictionary *userInfo = [self userInfoForData:data andResponse:response];
             NSError *apiError = [NSError errorWithDomain:@"com.zeropush.api" code:statusCode userInfo:userInfo];
@@ -251,8 +258,16 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     }];
 }
 
--(NSString *) urlFromPath:(NSString*) path
+-(NSString *) apiPath:(NSString*) path, ...
 {
-    return [NSString stringWithFormat:@"%@/%@", ZeroPushAPIURLHost, path];
+    NSMutableArray *segments = [NSMutableArray arrayWithObjects:ZeroPushAPIURLHost, path, nil];
+    NSString *segment;
+    
+    va_list args;
+    va_start(args, path);
+    while((segment = va_arg(args, NSString*))) {
+        [segments addObject:segment];
+    }
+    return [segments componentsJoinedByString:@"/"];
 }
 @end
