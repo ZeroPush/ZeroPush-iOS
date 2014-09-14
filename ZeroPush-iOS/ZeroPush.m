@@ -17,8 +17,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
 - (void)HTTPRequest:(NSString *) verb url:(NSString *)url params:(NSDictionary *)params completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler;
 - (void)HTTPRequest:(NSString *) verb url:(NSString *)url completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler;
-
-- (NSString*) apiPath:(NSString *)path, ... NS_REQUIRES_NIL_TERMINATION;
+-(void)HTTPRequest:(NSString *)verb url:(NSString *)url params:(NSDictionary *)params errorSelector:(SEL)errorSelector;
 @end
 
 @implementation ZeroPush
@@ -107,8 +106,10 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
         [params setObject:channel forKey:@"channel"];
     }
 
+    NSString *url = [NSString stringWithFormat:@"%@/register", ZeroPushAPIURLHost];
+
     [self HTTPRequest:@"POST"
-                  url:[self apiPath:@"register", nil]
+                  url:url
                params:params
         errorSelector:@selector(tokenRegistrationDidFailWithError:)];
 }
@@ -124,8 +125,10 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     [params setObject:self.apiKey forKey:@"auth_token"];
     [params setObject:[NSString stringWithFormat:@"%ld", badge] forKey:@"badge"];
 
+    NSString *url = [NSString stringWithFormat:@"%@/set_badge", ZeroPushAPIURLHost];
+
     [self HTTPRequest:@"POST"
-                  url:[self apiPath:@"set_badge", nil]
+                  url:url
                params:params
         errorSelector:@selector(setBadgeDidFailWithError:)];
 }
@@ -153,8 +156,10 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     [params setObject:self.apiKey forKey:@"auth_token"];
     [params setObject:channel forKey:@"channel"];
 
+    NSString *url = [NSString stringWithFormat:@"%@/subscribe", ZeroPushAPIURLHost];
+
     [self HTTPRequest:@"POST"
-                  url:[self apiPath:@"subscribe", nil]
+                  url:url
                params:params
         errorSelector:@selector(subscribeDidFailWithError:)];
 }
@@ -166,25 +171,30 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     [params setObject:self.apiKey forKey:@"auth_token"];
     [params setObject:channel forKey:@"channel"];
 
+    NSString *url = [NSString stringWithFormat:@"%@/subscribe", ZeroPushAPIURLHost];
+
     [self HTTPRequest:@"DELETE"
-                  url:[self apiPath:@"subscribe", nil]
+                  url:url
                params:params
         errorSelector:@selector(unsubscribeDidFailWithError:)];
 }
 
 -(void)unsubscribeFromAllChannels
 {
+    NSString *url = [NSString stringWithFormat:@"%@/device/%@", ZeroPushAPIURLHost, self.deviceToken];
+
     [self HTTPRequest:@"PUT"
-                  url:[self apiPath:@"device", self.deviceToken, nil]
+                  url:url
                params:@{@"auth_token": self.apiKey, @"channel_list": @""}
         errorSelector:@selector(unsubscribeDidFailWithError:)];
 }
 
 - (void)getChannels:(void (^)(NSArray *channels, NSError *error)) callback
 {
+    NSString *url = [NSString stringWithFormat:@"%@/device/%@", ZeroPushAPIURLHost, self.deviceToken];
 
     [self HTTPRequest:@"GET"
-                  url:[self apiPath:@"device", self.deviceToken, nil]
+                  url:url
                params:@{@"auth_token": self.apiKey}
     completionHandler:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
         if(connectionError) {
@@ -199,8 +209,10 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
 -(void)setChannels:(NSArray *)channels
 {
+    NSString *url = [NSString stringWithFormat:@"%@/device/%@", ZeroPushAPIURLHost, self.deviceToken];
+
     [self HTTPRequest:@"PUT"
-                  url:[self apiPath:@"device", self.deviceToken, nil]
+                  url:url
                params:@{@"auth_token": self.apiKey, @"channel_list": [channels componentsJoinedByString:@","]}
         errorSelector:@selector(subscribeDidFailWithError:)];
 }
@@ -217,8 +229,13 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
     if (params != nil)
     {
-        NSError *error;
-        NSData *json = [NSJSONSerialization dataWithJSONObject:params options:0 error:&error];
+        NSError *jsonError;
+        NSData *json = [NSJSONSerialization dataWithJSONObject:params options:0 error:&jsonError];
+
+        if(jsonError) {
+            return handler(nil, nil, jsonError);
+        }
+
         request.HTTPBody = json;
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     }
@@ -259,18 +276,5 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
             [self.delegate performSelector:errorSelector withObject:apiError];
         }
     }];
-}
-
--(NSString *) apiPath:(NSString*) path, ...
-{
-    NSMutableArray *segments = [NSMutableArray arrayWithObjects:ZeroPushAPIURLHost, path, nil];
-    NSString *segment;
-    
-    va_list args;
-    va_start(args, path);
-    while((segment = va_arg(args, NSString*))) {
-        [segments addObject:segment];
-    }
-    return [segments componentsJoinedByString:@"/"];
 }
 @end
