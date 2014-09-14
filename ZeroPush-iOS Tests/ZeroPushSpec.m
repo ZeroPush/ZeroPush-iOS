@@ -24,10 +24,14 @@
 }
 @end
 
-//move this into a helper
+/* NSData category */
+//  NSData+HexString.m
+//  libsecurity_transform
+//
+//  Copyright (c) 2011 Apple, Inc. All rights reserved.
+//
 @implementation NSData (HexString)
 
-// Not efficent
 +(id)dataWithHexString:(NSString *)hex
 {
 	char buf[3];
@@ -48,6 +52,13 @@
 
 @end
 
+/* ZeroPush TestMethods */
+
+@interface ZeroPush (TestMethods)
+
+@property (nonatomic, strong)NSHTTPURLResponse *lastResponse;
+
+@end
 
 SPEC_BEGIN(ZeroPushSpec)
 
