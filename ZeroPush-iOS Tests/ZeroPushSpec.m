@@ -46,7 +46,7 @@
 		*bp++ = strtol(buf, &b2, 16);
 		NSAssert(b2 == buf + 2, @"String should be all hex digits: %@ (bad digit around %ld)", hex, i);
 	}
-	
+
 	return [NSData dataWithBytesNoCopy:bytes length:[hex length]/2 freeWhenDone:YES];
 }
 
