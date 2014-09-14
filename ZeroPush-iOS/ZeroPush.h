@@ -23,7 +23,6 @@
 
 @property (nonatomic, copy) NSString *apiKey;
 @property (nonatomic, strong)NSString *deviceToken;
-@property (nonatomic, strong)NSHTTPURLResponse *lastResponse;
 
 @property (nonatomic, assign) id<ZeroPushDelegate> delegate;
 

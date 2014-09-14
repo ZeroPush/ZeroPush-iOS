@@ -13,6 +13,8 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
 @interface ZeroPush ()
 
+@property (nonatomic, strong)NSHTTPURLResponse *lastResponse;
+
 - (void)HTTPRequest:(NSString *) verb url:(NSString *)url params:(NSDictionary *)params completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler;
 - (void)HTTPRequest:(NSString *) verb url:(NSString *)url completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler;
 
@@ -180,6 +182,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
 - (void)getChannels:(void (^)(NSArray *channels, NSError *error)) callback
 {
+
     [self HTTPRequest:@"GET"
                   url:[self apiPath:@"device", self.deviceToken, nil]
                params:@{@"auth_token": self.apiKey}
@@ -208,7 +211,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 -(void)HTTPRequest:(NSString *) verb url:(NSString *)url params:(NSDictionary *)params completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler
 {
     self.lastResponse = nil;    //clear out the response
-    
+
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     request.HTTPMethod = verb;
 
@@ -224,9 +227,9 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[NSOperationQueue currentQueue]
                            completionHandler:^(NSURLResponse *urlResponse, NSData *data, NSError *error) {
-                               //call the handler, but remember to save the lastResponse
-                               self.lastResponse = (NSHTTPURLResponse *) urlResponse;
-                               handler(self.lastResponse, data, error);
+                               NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) urlResponse;
+                               handler(httpResponse, data, error);
+                               self.lastResponse = httpResponse;
                            }];
 }
 
