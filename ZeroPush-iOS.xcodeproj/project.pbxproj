@@ -19,7 +19,6 @@
 		F846088B19C35A50006D19DF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F0929516E64FC300C7BBDD /* Foundation.framework */; };
 		F846088C19C35A50006D19DF /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5628F0F416E6536300E504A2 /* UIKit.framework */; };
 		F846089219C35A51006D19DF /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = F846089019C35A50006D19DF /* InfoPlist.strings */; };
-		F885B66219C3874800E35057 /* NSData+HexString.m in Sources */ = {isa = PBXBuildFile; fileRef = F885B66119C3874800E35057 /* NSData+HexString.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,7 +61,6 @@
 		F846088F19C35A50006D19DF /* ZeroPush-iOS Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "ZeroPush-iOS Tests-Info.plist"; sourceTree = "<group>"; };
 		F846089119C35A50006D19DF /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		F846089519C35A51006D19DF /* ZeroPush-iOS Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZeroPush-iOS Tests-Prefix.pch"; sourceTree = "<group>"; };
-		F885B66119C3874800E35057 /* NSData+HexString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+HexString.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,7 +142,6 @@
 		F846088D19C35A50006D19DF /* ZeroPush-iOS Tests */ = {
 			isa = PBXGroup;
 			children = (
-				F885B66119C3874800E35057 /* NSData+HexString.m */,
 				F835A84F19C3636400B9B5D8 /* ZeroPushSpec.m */,
 				F846088E19C35A50006D19DF /* Supporting Files */,
 			);
@@ -307,7 +304,6 @@
 			files = (
 				F835A85019C3636400B9B5D8 /* ZeroPushSpec.m in Sources */,
 				F835A85119C3724300B9B5D8 /* ZeroPush.m in Sources */,
-				F885B66219C3874800E35057 /* NSData+HexString.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
