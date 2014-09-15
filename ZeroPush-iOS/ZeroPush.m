@@ -114,6 +114,39 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
         errorSelector:@selector(tokenRegistrationDidFailWithError:)];
 }
 
+- (NSString *)deviceToken
+{
+    if (_deviceToken == nil) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        _deviceToken = [defaults stringForKey:@"com.zeropush.api.deviceToken"];
+    }
+
+    if (_deviceToken == nil) {
+        return @"";
+    }
+
+    return _deviceToken;
+}
+
+- (void)setDeviceToken:(NSString *)deviceToken
+{
+    if (deviceToken != nil) {
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:deviceToken forKey:@"com.zeropush.api.deviceToken"];
+        [defaults synchronize];
+    }
+    _deviceToken = deviceToken;
+}
+
+-(NSString *)apiKey
+{
+    if (_apiKey == nil) {
+        return @"";
+    }
+    return _apiKey;
+}
+
+
 - (void)setBadge:(NSInteger)badge
 {
     // reset the device's badge
@@ -135,18 +168,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
 - (void)resetBadge
 {
-    if (_deviceToken == nil) {
-        return;
-    }
     [self setBadge:0];
-}
-
-- (NSString *)deviceToken
-{
-    if (_deviceToken == nil) {
-        return @"";
-    }
-    return _deviceToken;
 }
 
 - (void)subscribeToChannel:(NSString *)channel;
