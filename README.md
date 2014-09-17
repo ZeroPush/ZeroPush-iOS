@@ -14,7 +14,7 @@ We recommend using the [ZeroPush Cocoapod](http://cocoapods.org/?q=zeropush).
 In your `Podfile` add the following line:
 
 ```ruby
-pod 'ZeroPush', '~> 1.1.0'
+pod 'ZeroPush', '~> 2.0'
 ```
 
 and install the Pods
@@ -28,13 +28,19 @@ Configuration:
 After the client library has been installed, add the following to your `AppDelegate`.
 
 ```objc
-// In your application delegate
+//In AppDelegate.h - Add the ZeroPushDelegate
+
+#import "ZeroPush.h"
+@interface AppDelegate : UIResponder <UIApplicationDelegate, ZeroPushDelegate>
+
+
+// In AppDelegate.m
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     [ZeroPush engageWithAPIKey:@"your-zeropush-app-token" delegate:self];
-    [[ZeroPush shared] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeAlert |
-                                                           UIRemoteNotificationTypeBadge |
-                                                           UIRemoteNotificationTypeSound)];
+
+    //now ask the user if they want to recieve push notifications. You can place this in another part of your app.
+    [[ZeroPush shared] registerForRemoteNotifications];
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)tokenData
@@ -45,23 +51,24 @@ After the client library has been installed, add the following to your `AppDeleg
     // This would be a good time to save the token and associate it with a user that you want to notify later.
     NSString *tokenString = [ZeroPush deviceTokenFromData:tokenData];
     NSLog(@"%@", tokenString);
+
+    // For instance you can associate it with a user's email address
+    // [[ZeroPush shared] subscribeToChannel:@"user@example.com"];
+    // You can then use the /broadcast endpoint to notify all devices subscribed to that email address. No need to save tokens!
+    // Don't forget to unsubscribe from the channel when the user logs out of your app!
 }
 
--(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    //common problems include: not having your provisioning profile configured for apns, or mismatching bundle identifiers
-    NSLog(@"%@", error.localizedDescription);
+    NSLog(@"%@", [error description]);
+    //Common reason for errors:
+    //  1.) Simulator does not support receiving push notifications
+    //  2.) User rejected push alert
+    //  3.) "no valid 'aps-environment' entitlement string found for application"
+    //      This means your provisioning profile does not have Push Notifications configured. https://zeropush.com/documentation/generating_certificates
 }
+
 ```
-
-Dependencies:
----
-
-ZeroPush-iOS depends on
-
-NSData+FormEncoding.h and Seriously.h
-
-from [ADiOSUtilities](https://github.com/adamvduke/ADiOSUtilities) and [seriously](https://github.com/probablycorey/seriously) respectively
 
 Documentation:
 ---
