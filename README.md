@@ -1,4 +1,5 @@
 [![ZeroPush](https://raw.github.com/ZeroPush/ZeroPush-iOS/master/zeropush-docs-header.png)](https://zeropush.com)
+[![ZeroPush Cocoapod](http://img.shields.io/cocoapods/v/ZeroPush.svg)](http://cocoapods.org/?q=zeropush)
 
 Purpose:
 ---
