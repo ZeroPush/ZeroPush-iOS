@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "ZeroPush"
-  s.version      = "2.0.0"
+  s.version      = "2.0.1"
   s.summary      = "ZeroPush is a lightweight wrapper for the ZeroPush API."
   s.homepage     = "https://zeropush.com"
   s.license      = 'MIT'
