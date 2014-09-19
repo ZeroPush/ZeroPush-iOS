@@ -74,14 +74,14 @@ After the client library has been installed, add the following to your `AppDeleg
 Upgrading from iOS7
 ---
 
-If you are using the helper method `[[ZeroPush shared] registerForRemoteNotificationTypes]` in iOS8, you will need to change it.
+If you were using the helper method `[[ZeroPush shared] registerForRemoteNotificationTypes:]` in iOS7, you will need to change it when deploying to iOS8
 
 iOS7:
 ```
 [[ZeroPush shared] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 ```
 
-iOS7 + iOS8:
+iOS7 and iOS8:
 ```
 [[ZeroPush shared] registerForRemoteNotificationTypes];
 ```
