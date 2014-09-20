@@ -83,7 +83,7 @@ Before:
 
 After:
 ```
-[[ZeroPush shared] registerForRemoteNotificationTypes];
+[[ZeroPush shared] registerForRemoteNotifications];
 ```
 
 Documentation:
