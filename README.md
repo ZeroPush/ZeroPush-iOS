@@ -76,12 +76,12 @@ Upgrading from iOS7
 
 If you were using the helper method `[[ZeroPush shared] registerForRemoteNotificationTypes:]` in iOS7, you will need to change it when deploying to iOS8
 
-iOS7:
+Before:
 ```
 [[ZeroPush shared] registerForRemoteNotificationTypes:(UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
 ```
 
-iOS7 and iOS8:
+After:
 ```
 [[ZeroPush shared] registerForRemoteNotificationTypes];
 ```
