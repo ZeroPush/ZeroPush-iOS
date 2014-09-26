@@ -160,7 +160,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:self.deviceToken forKey:@"device_token"];
     [params setObject:self.apiKey forKey:@"auth_token"];
-    [params setObject:[NSString stringWithFormat:@"%ld", badge] forKey:@"badge"];
+    [params setObject:[NSString stringWithFormat:@"%d", badge] forKey:@"badge"];
 
     NSString *url = [NSString stringWithFormat:@"%@/set_badge", ZeroPushAPIURLHost];
 
@@ -281,6 +281,8 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     [self HTTPRequest:verb url:url params:nil completionHandler:handler];
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
 -(void)HTTPRequest:(NSString *)verb url:(NSString *)url params:(NSDictionary *)params errorSelector:(SEL)errorSelector
 {
     [self HTTPRequest:verb url:url params:params completionHandler:^(NSHTTPURLResponse *response, NSData *data, NSError *error) {
@@ -303,4 +305,5 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
         }
     }];
 }
+#pragma clang diagnostic pop
 @end
