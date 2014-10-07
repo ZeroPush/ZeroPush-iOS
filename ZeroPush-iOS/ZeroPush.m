@@ -207,7 +207,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
 -(void)unsubscribeFromAllChannels
 {
-    NSString *url = [NSString stringWithFormat:@"%@/device/%@", ZeroPushAPIURLHost, self.deviceToken];
+    NSString *url = [NSString stringWithFormat:@"%@/devices/%@", ZeroPushAPIURLHost, self.deviceToken];
 
     [self HTTPRequest:@"PUT"
                   url:url
@@ -217,7 +217,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
 - (void)getChannels:(void (^)(NSArray *channels, NSError *error)) callback
 {
-    NSString *url = [NSString stringWithFormat:@"%@/device/%@", ZeroPushAPIURLHost, self.deviceToken];
+    NSString *url = [NSString stringWithFormat:@"%@/devices/%@", ZeroPushAPIURLHost, self.deviceToken];
 
     [self HTTPRequest:@"GET"
                   url:url
@@ -235,7 +235,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
 -(void)setChannels:(NSArray *)channels
 {
-    NSString *url = [NSString stringWithFormat:@"%@/device/%@", ZeroPushAPIURLHost, self.deviceToken];
+    NSString *url = [NSString stringWithFormat:@"%@/devices/%@", ZeroPushAPIURLHost, self.deviceToken];
 
     [self HTTPRequest:@"PUT"
                   url:url

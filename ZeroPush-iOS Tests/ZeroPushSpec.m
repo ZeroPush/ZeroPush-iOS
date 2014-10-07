@@ -204,7 +204,7 @@ describe(@"ZeroPush", ^{
 
         context(@"unsubscribeFromAllChannels", ^{
             it(@"should remove all channels", ^{
-                stubRequest(@"PUT", @"https://api.zeropush.com/device/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
+                stubRequest(@"PUT", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
                 withHeaders(@{ @"Content-Type": @"application/json" }).
                 withBody(@"{\"channel_list\":\"\",\"auth_token\":\"testing\"}");
                 [zeroPush unsubscribeFromAllChannels];
@@ -212,7 +212,7 @@ describe(@"ZeroPush", ^{
             });
 
             it(@"should call the error selector if an error occured", ^{
-                stubRequest(@"PUT", @"https://api.zeropush.com/device/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
+                stubRequest(@"PUT", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
                 withHeaders(@{ @"Content-Type": @"application/json" }).
                 withBody(@"{\"channel_list\":\"\",\"auth_token\":\"testing\"}").
                 andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
@@ -226,7 +226,7 @@ describe(@"ZeroPush", ^{
             it(@"should invoke the callback with the channels", ^{
                 __block NSArray *fetchedChannels = nil;
 
-                stubRequest(@"GET", @"https://api.zeropush.com/device/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
+                stubRequest(@"GET", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
                 withHeaders(@{ @"Content-Type": @"application/json" }).
                 withBody(@"{\"auth_token\":\"testing\"}").
                 andReturn(200).
@@ -243,7 +243,7 @@ describe(@"ZeroPush", ^{
                 __block NSArray *fetchedChannels = nil;
                 __block NSError *requestError = nil;
 
-                stubRequest(@"GET", @"https://api.zeropush.com/device/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
+                stubRequest(@"GET", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
                 withHeaders(@{ @"Content-Type": @"application/json" }).
                 withBody(@"{\"auth_token\":\"testing\"}").
                 andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
@@ -259,7 +259,7 @@ describe(@"ZeroPush", ^{
 
         context(@"setChannels", ^{
             it(@"should make a request to set channels", ^{
-                stubRequest(@"PUT", @"https://api.zeropush.com/device/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
+                stubRequest(@"PUT", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
                 withHeaders(@{ @"Content-Type": @"application/json" }).
                 withBody(@"{\"channel_list\":\"player-1,game-12\",\"auth_token\":\"testing\"}");
 
@@ -268,7 +268,7 @@ describe(@"ZeroPush", ^{
             });
 
             it(@"should call the error selector if an error occured", ^{
-                stubRequest(@"PUT", @"https://api.zeropush.com/device/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
+                stubRequest(@"PUT", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
                 withHeaders(@{ @"Content-Type": @"application/json" }).
                 withBody(@"{\"channel_list\":\"player-1,game-12\",\"auth_token\":\"testing\"}").
                 andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
