@@ -160,7 +160,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:self.deviceToken forKey:@"device_token"];
     [params setObject:self.apiKey forKey:@"auth_token"];
-    [params setObject:[NSString stringWithFormat:@"%d", badge] forKey:@"badge"];
+    [params setObject:[NSString stringWithFormat:@"%ld", (long)badge] forKey:@"badge"];
 
     NSString *url = [NSString stringWithFormat:@"%@/set_badge", ZeroPushAPIURLHost];
 
