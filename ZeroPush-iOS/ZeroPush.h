@@ -24,7 +24,7 @@
 @property (nonatomic, copy) NSString *apiKey;
 @property (nonatomic, strong)NSString *deviceToken;
 
-@property (nonatomic, assign) id<ZeroPushDelegate> delegate;
+@property (nonatomic, weak) id<ZeroPushDelegate> delegate;
 
 /**
  * Get the shared ZeroPush instance

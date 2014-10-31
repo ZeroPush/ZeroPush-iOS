@@ -104,9 +104,21 @@ describe(@"ZeroPush", ^{
     });
 
     context(@"engageWithAPIKey", ^{
-        it(@"should intialize the shared instance", ^{
+        it(@"should initialize the shared instance", ^{
             [ZeroPush engageWithAPIKey:@"testing"];
             [[[ZeroPush shared].apiKey should] equal:@"testing"];
+        });
+        it(@"should initialize the shared instance with a delegate", ^{
+            id newDelegate = [[TestApplication alloc] init];
+            [ZeroPush engageWithAPIKey:@"testing" delegate:newDelegate];
+            [[(NSObject*)[ZeroPush shared].delegate should] equal:newDelegate];
+            [[(NSObject*)[ZeroPush shared].delegate shouldNot] equal:application];
+        });
+        it(@"should not attempt to deference a deallocated delegate", ^{
+            id newDelegate = [[TestApplication alloc] init];
+            [ZeroPush engageWithAPIKey:@"testing" delegate:newDelegate];
+            newDelegate = nil;  //dealloc
+            [[(NSObject*)[ZeroPush shared].delegate should] beNil];
         });
     });
 
