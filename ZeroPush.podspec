@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.license      = 'MIT'
   s.authors      = { "Adam Duke" => "adam.v.duke@gmail.com", "Stefan Natchev" => "stefan.natchev@gmail.com" }
   s.source       = { :git => "https://github.com/ZeroPush/ZeroPush-iOS.git", :tag => "2.0.3" }
-  s.platform     = :ios
+  s.platform     = :ios, '6.0'
   s.source_files = 'ZeroPush-iOS/*.{h,m}'
   s.frameworks   = 'Foundation', 'UIKit'
   s.requires_arc = true
