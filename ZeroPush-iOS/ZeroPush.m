@@ -14,6 +14,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 @interface ZeroPush ()
 
 @property (nonatomic, strong)NSHTTPURLResponse *lastResponse;
+@property (nonatomic, strong)NSOperationQueue *operationQueue;
 
 - (void)HTTPRequest:(NSString *) verb url:(NSString *)url params:(NSDictionary *)params completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler;
 - (void)HTTPRequest:(NSString *) verb url:(NSString *)url completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler;
@@ -56,6 +57,16 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
     token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
     return token;
+}
+
+-(id)init {
+    self = [super init];
+    if (!self) {
+        return nil;
+    }
+
+    self.operationQueue = [[NSOperationQueue alloc] init];
+    return self;
 }
 
 - (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
@@ -266,9 +277,8 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     }
 
-    //NOTE: Consider queue, availability?
     [NSURLConnection sendAsynchronousRequest:request
-                                       queue:[NSOperationQueue currentQueue]
+                                       queue:self.operationQueue
                            completionHandler:^(NSURLResponse *urlResponse, NSData *data, NSError *error) {
                                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) urlResponse;
                                handler(httpResponse, data, error);
