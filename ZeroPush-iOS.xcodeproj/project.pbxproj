@@ -12,7 +12,6 @@
 		56F0929616E64FC300C7BBDD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F0929516E64FC300C7BBDD /* Foundation.framework */; };
 		56F0929B16E64FC300C7BBDD /* ZeroPush.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 56F0929A16E64FC300C7BBDD /* ZeroPush.h */; };
 		56F0929D16E64FC300C7BBDD /* ZeroPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F0929C16E64FC300C7BBDD /* ZeroPush.m */; };
-		BF3E7A9E044A46D1A8FC1237 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 83EC5399078E48BBAEF4040D /* libPods.a */; };
 		F835A85019C3636400B9B5D8 /* ZeroPushSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = F835A84F19C3636400B9B5D8 /* ZeroPushSpec.m */; };
 		F835A85119C3724300B9B5D8 /* ZeroPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F0929C16E64FC300C7BBDD /* ZeroPush.m */; };
 		F846088A19C35A50006D19DF /* XCTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F846088919C35A50006D19DF /* XCTest.framework */; };
@@ -70,7 +69,6 @@
 			files = (
 				5628F0F516E6536300E504A2 /* UIKit.framework in Frameworks */,
 				56F0929616E64FC300C7BBDD /* Foundation.framework in Frameworks */,
-				BF3E7A9E044A46D1A8FC1237 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
