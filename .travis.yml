@@ -1,0 +1,2 @@
+language: objective-c
+script: xcodebuild -workspace ZeroPush-iOS.xcworkspace -scheme 'ZeroPush-iOS Tests' -destination 'platform=iOS Simulator,name=iPhone 6,OS=latest' clean build test

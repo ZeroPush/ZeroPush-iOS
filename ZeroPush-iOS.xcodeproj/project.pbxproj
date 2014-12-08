@@ -45,15 +45,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0DC84CD4355CFB169F36B029 /* Pods-ZeroPush-iOS Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZeroPush-iOS Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZeroPush-iOS Tests/Pods-ZeroPush-iOS Tests.release.xcconfig"; sourceTree = "<group>"; };
 		5628F0F416E6536300E504A2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		56F0929216E64FC300C7BBDD /* libZeroPush-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZeroPush-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56F0929516E64FC300C7BBDD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		56F0929916E64FC300C7BBDD /* ZeroPush-iOS-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZeroPush-iOS-Prefix.pch"; sourceTree = "<group>"; };
 		56F0929A16E64FC300C7BBDD /* ZeroPush.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZeroPush.h; sourceTree = "<group>"; };
 		56F0929C16E64FC300C7BBDD /* ZeroPush.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZeroPush.m; sourceTree = "<group>"; };
-		767D406B871E4389B9F0BE8D /* Pods-ZeroPush-iOS Tests.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZeroPush-iOS Tests.xcconfig"; path = "Pods/Pods-ZeroPush-iOS Tests.xcconfig"; sourceTree = "<group>"; };
 		83EC5399078E48BBAEF4040D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		ED18E9462589407E9E702B4E /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
+		D0C9BDD3B0D69B132C1E99D9 /* Pods-ZeroPush-iOS Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZeroPush-iOS Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZeroPush-iOS Tests/Pods-ZeroPush-iOS Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		F3643AE1BC094FDD95725C55 /* libPods-ZeroPush-iOS Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZeroPush-iOS Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F835A84F19C3636400B9B5D8 /* ZeroPushSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZeroPushSpec.m; sourceTree = "<group>"; };
 		F846088819C35A50006D19DF /* ZeroPush-iOS Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "ZeroPush-iOS Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,6 +88,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		541CCCBCA8D1EC0CD33FE70A /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D0C9BDD3B0D69B132C1E99D9 /* Pods-ZeroPush-iOS Tests.debug.xcconfig */,
+				0DC84CD4355CFB169F36B029 /* Pods-ZeroPush-iOS Tests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		56F0928916E64FC300C7BBDD = {
 			isa = PBXGroup;
 			children = (
@@ -95,8 +104,7 @@
 				F846088D19C35A50006D19DF /* ZeroPush-iOS Tests */,
 				56F0929416E64FC300C7BBDD /* Frameworks */,
 				56F0929316E64FC300C7BBDD /* Products */,
-				ED18E9462589407E9E702B4E /* Pods.xcconfig */,
-				767D406B871E4389B9F0BE8D /* Pods-ZeroPush-iOS Tests.xcconfig */,
+				541CCCBCA8D1EC0CD33FE70A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -168,7 +176,6 @@
 				56F0928E16E64FC300C7BBDD /* Sources */,
 				56F0928F16E64FC300C7BBDD /* Frameworks */,
 				56F0929016E64FC300C7BBDD /* CopyFiles */,
-				E4EB165895D3433381A49000 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -255,7 +262,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-ZeroPush-iOS Tests-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZeroPush-iOS Tests/Pods-ZeroPush-iOS Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		9C03861ECCE5485DBBC64916 /* Check Pods Manifest.lock */ = {
@@ -272,20 +279,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
-		};
-		E4EB165895D3433381A49000 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -384,7 +377,6 @@
 		};
 		56F092A116E64FC300C7BBDD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ED18E9462589407E9E702B4E /* Pods.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/ZeroPush_iOS.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -397,7 +389,6 @@
 		};
 		56F092A216E64FC300C7BBDD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = ED18E9462589407E9E702B4E /* Pods.xcconfig */;
 			buildSettings = {
 				DSTROOT = /tmp/ZeroPush_iOS.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -410,7 +401,7 @@
 		};
 		F846089819C35A51006D19DF /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 767D406B871E4389B9F0BE8D /* Pods-ZeroPush-iOS Tests.xcconfig */;
+			baseConfigurationReference = D0C9BDD3B0D69B132C1E99D9 /* Pods-ZeroPush-iOS Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "";
 				CLANG_ENABLE_MODULES = YES;
@@ -443,7 +434,7 @@
 		};
 		F846089919C35A51006D19DF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 767D406B871E4389B9F0BE8D /* Pods-ZeroPush-iOS Tests.xcconfig */;
+			baseConfigurationReference = 0DC84CD4355CFB169F36B029 /* Pods-ZeroPush-iOS Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "";
 				CLANG_ENABLE_MODULES = YES;
