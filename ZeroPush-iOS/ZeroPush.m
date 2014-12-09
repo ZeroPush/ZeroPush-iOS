@@ -9,7 +9,6 @@
 #import "ZeroPush.h"
 
 static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
-//static NSString *const ZeroPushAPIURLHost = @"http://localhost:3000/api";
 
 @interface ZeroPush ()
 
@@ -298,6 +297,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
     [self HTTPRequest:verb url:url params:params completionHandler:^(NSHTTPURLResponse *response, NSData *data, NSError *error) {
 
         if (![self.delegate respondsToSelector:errorSelector]) {
+            NSLog(@"ZeroPush-iOS: %@", [error description]);
             return;
         }
         if (error) {
