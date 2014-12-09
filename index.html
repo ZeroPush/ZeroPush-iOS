@@ -29,7 +29,8 @@
       </header>
       <section>
         <p><a href="https://zeropush.com"><img src="https://raw.github.com/ZeroPush/ZeroPush-iOS/master/zeropush-docs-header.png" alt="ZeroPush"></a>
-<a href="http://cocoapods.org/?q=zeropush"><img src="http://img.shields.io/cocoapods/v/ZeroPush.svg" alt="ZeroPush Cocoapod"></a></p>
+<a href="http://cocoapods.org/?q=zeropush"><img src="https://img.shields.io/cocoapods/v/ZeroPush.svg" alt="ZeroPush Cocoapod"></a>
+<a href="https://travis-ci.org/ZeroPush/ZeroPush-iOS"><img src="https://img.shields.io/travis/ZeroPush/ZeroPush-iOS.svg" alt="ZeroPush Travis"></a></p>
 
 <h2>
 <a id="purpose" class="anchor" href="#purpose" aria-hidden="true"><span class="octicon octicon-link"></span></a>Purpose:</h2>
@@ -44,59 +45,56 @@ It provides some convenience methods to help you get up an running with ZeroPush
 
 <p>In your <code>Podfile</code> add the following line:</p>
 
-<div class="highlight highlight-ruby"><pre><span class="n">pod</span> <span class="s1">'ZeroPush'</span><span class="p">,</span> <span class="s1">'~&gt; 2.0'</span>
-</pre></div>
+<div class="highlight highlight-ruby"><pre>pod <span class="pl-s1"><span class="pl-pds">'</span>ZeroPush<span class="pl-pds">'</span></span>, <span class="pl-s1"><span class="pl-pds">'</span>~&gt; 2.0<span class="pl-pds">'</span></span></pre></div>
 
 <p>and install the Pods</p>
 
-<div class="highlight highlight-bash"><pre><span class="nv">$&gt;</span> pod install
-</pre></div>
+<div class="highlight highlight-bash"><pre>$<span class="pl-k">&gt;</span> pod install</pre></div>
 
 <h2>
 <a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span class="octicon octicon-link"></span></a>Configuration:</h2>
 
 <p>After the client library has been installed, add the following to your <code>AppDelegate</code>.</p>
 
-<div class="highlight highlight-objc"><pre><span class="c1">//In AppDelegate.h - Add the ZeroPushDelegate</span>
+<div class="highlight highlight-objc"><pre><span class="pl-c">//In AppDelegate.h - Add the ZeroPushDelegate</span>
 
-<span class="cp">#import "ZeroPush.h"</span>
-<span class="k">@interface</span> <span class="nc">AppDelegate</span> : <span class="bp">UIResponder</span> <span class="o">&lt;</span><span class="bp">UIApplicationDelegate</span><span class="p">,</span> <span class="n">ZeroPushDelegate</span><span class="o">&gt;</span>
+#<span class="pl-k">import</span> <span class="pl-s1"><span class="pl-pds">"</span>ZeroPush.h<span class="pl-pds">"</span></span>
+<span class="pl-st">@interface</span> <span class="pl-en">AppDelegate</span> : <span class="pl-e">UIResponder</span> &lt;UIApplicationDelegate, ZeroPushDelegate&gt;
 
 
-<span class="c1">// In AppDelegate.m</span>
-<span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">applicationDidBecomeActive</span><span class="p">:(</span><span class="bp">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="n">application</span>
-<span class="p">{</span>
-    <span class="p">[</span><span class="n">ZeroPush</span> <span class="nl">engageWithAPIKey</span><span class="p">:</span><span class="s">@"your-zeropush-app-token"</span> <span class="nl">delegate</span><span class="p">:</span><span class="nb">self</span><span class="p">];</span>
+<span class="pl-c">// In AppDelegate.m</span>
+- (<span class="pl-st">void</span>)<span class="pl-en">applicationDidBecomeActive</span><span class="pl-en">:</span>(UIApplication *)<span class="pl-vpf">application</span>
+{
+    [ZeroPush <span class="pl-s3">engageWithAPIKey:</span><span class="pl-s1"><span class="pl-pds">@"</span>your-zeropush-app-token<span class="pl-pds">"</span></span> <span class="pl-s3">delegate:</span><span class="pl-v">self</span>];
 
-    <span class="c1">//now ask the user if they want to recieve push notifications. You can place this in another part of your app.</span>
-    <span class="p">[[</span><span class="n">ZeroPush</span> <span class="n">shared</span><span class="p">]</span> <span class="n">registerForRemoteNotifications</span><span class="p">];</span>
-<span class="p">}</span>
+    <span class="pl-c">//now ask the user if they want to recieve push notifications. You can place this in another part of your app.</span>
+    [[ZeroPush <span class="pl-s3">shared</span>] <span class="pl-s3">registerForRemoteNotifications</span>];
+}
 
-<span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">application</span><span class="p">:(</span><span class="bp">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="n">application</span> <span class="nl">didRegisterForRemoteNotificationsWithDeviceToken</span><span class="p">:(</span><span class="bp">NSData</span> <span class="o">*</span><span class="p">)</span><span class="n">tokenData</span>
-<span class="p">{</span>
-    <span class="c1">// Call the convenience method registerDeviceToken, this helps us track device tokens for you</span>
-    <span class="p">[[</span><span class="n">ZeroPush</span> <span class="n">shared</span><span class="p">]</span> <span class="nl">registerDeviceToken</span><span class="p">:</span><span class="n">tokenData</span><span class="p">];</span>
+- (<span class="pl-st">void</span>)<span class="pl-en">application</span><span class="pl-en">:</span>(UIApplication *)<span class="pl-vpf">application</span> <span class="pl-en">didRegisterForRemoteNotificationsWithDeviceToken</span><span class="pl-en">:</span>(<span class="pl-s3">NSData</span> *)<span class="pl-vpf">tokenData</span>
+{
+    <span class="pl-c">// Call the convenience method registerDeviceToken, this helps us track device tokens for you</span>
+    [[ZeroPush <span class="pl-s3">shared</span>] <span class="pl-s3">registerDeviceToken:</span>tokenData];
 
-    <span class="c1">// This would be a good time to save the token and associate it with a user that you want to notify later.</span>
-    <span class="bp">NSString</span> <span class="o">*</span><span class="n">tokenString</span> <span class="o">=</span> <span class="p">[</span><span class="n">ZeroPush</span> <span class="nl">deviceTokenFromData</span><span class="p">:</span><span class="n">tokenData</span><span class="p">];</span>
-    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%@"</span><span class="p">,</span> <span class="n">tokenString</span><span class="p">);</span>
+    <span class="pl-c">// This would be a good time to save the token and associate it with a user that you want to notify later.</span>
+    <span class="pl-s3">NSString</span> *tokenString = [ZeroPush <span class="pl-s3">deviceTokenFromData:</span>tokenData];
+    <span class="pl-s3">NSLog</span>(<span class="pl-s1"><span class="pl-pds">@"</span><span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, tokenString);
 
-    <span class="c1">// For instance you can associate it with a user's email address</span>
-    <span class="c1">// [[ZeroPush shared] subscribeToChannel:@"user@example.com"];</span>
-    <span class="c1">// You can then use the /broadcast endpoint to notify all devices subscribed to that email address. No need to save tokens!</span>
-    <span class="c1">// Don't forget to unsubscribe from the channel when the user logs out of your app!</span>
-<span class="p">}</span>
+    <span class="pl-c">// For instance you can associate it with a user's email address</span>
+    <span class="pl-c">// [[ZeroPush shared] subscribeToChannel:@"user@example.com"];</span>
+    <span class="pl-c">// You can then use the /broadcast endpoint to notify all devices subscribed to that email address. No need to save tokens!</span>
+    <span class="pl-c">// Don't forget to unsubscribe from the channel when the user logs out of your app!</span>
+}
 
-<span class="o">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nl">application</span><span class="p">:(</span><span class="bp">UIApplication</span> <span class="o">*</span><span class="p">)</span><span class="n">application</span> <span class="nl">didFailToRegisterForRemoteNotificationsWithError</span><span class="p">:(</span><span class="bp">NSError</span> <span class="o">*</span><span class="p">)</span><span class="n">error</span>
-<span class="p">{</span>
-    <span class="n">NSLog</span><span class="p">(</span><span class="s">@"%@"</span><span class="p">,</span> <span class="p">[</span><span class="n">error</span> <span class="n">description</span><span class="p">]);</span>
-    <span class="c1">//Common reason for errors:</span>
-    <span class="c1">//  1.) Simulator does not support receiving push notifications</span>
-    <span class="c1">//  2.) User rejected push alert</span>
-    <span class="c1">//  3.) "no valid 'aps-environment' entitlement string found for application"</span>
-    <span class="c1">//      This means your provisioning profile does not have Push Notifications configured. https://zeropush.com/documentation/generating_certificates</span>
-<span class="p">}</span>
-
+- (<span class="pl-st">void</span>)<span class="pl-en">application</span><span class="pl-en">:</span>(UIApplication *)<span class="pl-vpf">application</span> <span class="pl-en">didFailToRegisterForRemoteNotificationsWithError</span><span class="pl-en">:</span>(<span class="pl-s3">NSError</span> *)<span class="pl-vpf">error</span>
+{
+    <span class="pl-s3">NSLog</span>(<span class="pl-s1"><span class="pl-pds">@"</span><span class="pl-c1">%@</span><span class="pl-pds">"</span></span>, [error <span class="pl-s3">description</span>]);
+    <span class="pl-c">//Common reason for errors:</span>
+    <span class="pl-c">//  1.) Simulator does not support receiving push notifications</span>
+    <span class="pl-c">//  2.) User rejected push alert</span>
+    <span class="pl-c">//  3.) "no valid 'aps-environment' entitlement string found for application"</span>
+    <span class="pl-c">//      This means your provisioning profile does not have Push Notifications configured. https://zeropush.com/documentation/generating_certificates</span>
+}
 </pre></div>
 
 <h2>
