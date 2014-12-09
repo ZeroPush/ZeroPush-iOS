@@ -27,6 +27,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 @synthesize delegate = _delegate;
 @synthesize deviceToken = _deviceToken;
 @synthesize lastResponse = _lastResponse;
+@synthesize operationQueue = _operationQueue;
 
 + (ZeroPush *)shared
 {
@@ -61,11 +62,10 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 
 -(id)init {
     self = [super init];
-    if (!self) {
-        return nil;
+    if (self) {
+        _operationQueue = [[NSOperationQueue alloc] init];
     }
 
-    self.operationQueue = [[NSOperationQueue alloc] init];
     return self;
 }
 
