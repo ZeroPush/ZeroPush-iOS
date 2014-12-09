@@ -9,6 +9,7 @@
 #import "ZeroPush.h"
 
 static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
+static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.4";
 
 @interface ZeroPush ()
 
@@ -273,6 +274,7 @@ static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
         }
 
         request.HTTPBody = json;
+        [request setValue:ZeroPushClientVersion forHTTPHeaderField:@"X-API-Client-Agent"];
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     }
 
