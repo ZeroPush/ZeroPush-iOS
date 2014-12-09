@@ -1,6 +1,6 @@
 [![ZeroPush](https://raw.github.com/ZeroPush/ZeroPush-iOS/master/zeropush-docs-header.png)](https://zeropush.com)
-[![ZeroPush Cocoapod](http://img.shields.io/cocoapods/v/ZeroPush.svg)](http://cocoapods.org/?q=zeropush)
-[![ZeroPush Travis](http://img.shields.io/travis/ZeroPush/ZeroPush-iOS.svg)](https://travis-ci.org/ZeroPush/ZeroPush-iOS)
+[![ZeroPush Cocoapod](https://img.shields.io/cocoapods/v/ZeroPush.svg)](http://cocoapods.org/?q=zeropush)
+[![ZeroPush Travis](https://img.shields.io/travis/ZeroPush/ZeroPush-iOS.svg)](https://travis-ci.org/ZeroPush/ZeroPush-iOS)
 
 Purpose:
 ---
