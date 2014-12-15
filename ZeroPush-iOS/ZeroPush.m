@@ -69,11 +69,6 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.4";
     return self;
 }
 
-- (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
-{
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
-}
-
 - (void)registerForRemoteNotifications
 {
 #ifdef __IPHONE_8_0

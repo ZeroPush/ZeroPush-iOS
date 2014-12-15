@@ -47,12 +47,6 @@
 + (NSString *)deviceTokenFromData:(NSData *)tokenData;
 
 /**
- * A convenience wrapper for [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
- * deprecated in iOS7
- */
-- (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
-
-/**
  * Preferred method for registering for notifications. Backwards compatible with iOS7
  */
 - (void)registerForRemoteNotifications;
