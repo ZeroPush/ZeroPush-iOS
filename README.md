@@ -39,7 +39,11 @@ After the client library has been installed, add the following to your `AppDeleg
 // In AppDelegate.m
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    [ZeroPush engageWithAPIKey:@"your-zeropush-app-token" delegate:self];
+#if DEBUG
+    [ZeroPush engageWithAPIKey:@"iosdev_apptoken" delegate:self];
+#else
+    [ZeroPush engageWithAPIKey:@"iosprod_apptoken" delegate:self];
+#endif
 
     //now ask the user if they want to recieve push notifications. You can place this in another part of your app.
     [[ZeroPush shared] registerForRemoteNotifications];
