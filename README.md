@@ -99,7 +99,7 @@ For more detailed documentation, refer to the [ZeroPush Docs](https://zeropush.c
 License:
 ---
 
-Copyright (c) 2014 Symmetric Infinity LLC
+Copyright (c) 2015 Symmetric Infinity LLC
 
 MIT License
 
