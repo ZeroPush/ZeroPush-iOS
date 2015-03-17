@@ -3,7 +3,7 @@
 //  ZeroPush-iOS
 //
 //  Created by Stefan Natchev on 9/12/14.
-//  Copyright (c) 2014 ZeroPush. All rights reserved.
+//  Copyright (c) 2015 ZeroPush. All rights reserved.
 //
 
 #import "Kiwi.h"
@@ -146,8 +146,9 @@ describe(@"ZeroPush", ^{
         context(@"registerDeviceToken", ^{
             it(@"should register with a device token", ^{
                 stubRequest(@"POST", @"https://api.zeropush.com/register").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
 
                 [zeroPush registerDeviceToken:deviceToken];
                 [[[zeroPush deviceToken] should] equal:@"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"];
@@ -156,8 +157,9 @@ describe(@"ZeroPush", ^{
 
             it(@"should register with a device token and subscribe it to a channel", ^{
                 stubRequest(@"POST", @"https://api.zeropush.com/register").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\",\"channel\":\"testing-channel\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"channel\":\"testing-channel\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
 
                 [zeroPush registerDeviceToken:deviceToken channel:@"testing-channel"];
                 [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
@@ -165,8 +167,9 @@ describe(@"ZeroPush", ^{
 
             it(@"should call the error selector if an error happens", ^{
                 stubRequest(@"POST", @"https://api.zeropush.com/register").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}").
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}").
                 andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
 
                 [zeroPush registerDeviceToken:deviceToken];
@@ -177,16 +180,18 @@ describe(@"ZeroPush", ^{
         context(@"subscribeToChannel", ^{
             it(@"should add a new channel to the channel subscriptions", ^{
                 stubRequest(@"POST", @"https://api.zeropush.com/subscribe").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\",\"channel\":\"player-1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"channel\":\"player-1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
                 [zeroPush subscribeToChannel:@"player-1"];
                 [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
             });
 
             it(@"should call the error selector if an error occured", ^{
                 stubRequest(@"POST", @"https://api.zeropush.com/subscribe").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\",\"channel\":\"player-1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}").
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"channel\":\"player-1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}").
                 andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
                 [zeroPush subscribeToChannel:@"player-1"];
                 [[expectFutureValue(application) shouldEventually] receive:@selector(subscribeDidFailWithError:)];
@@ -196,8 +201,9 @@ describe(@"ZeroPush", ^{
         context(@"unsubscribeFromChannel", ^{
             it(@"should remove a channel from the channel subscriptions", ^{
                 stubRequest(@"DELETE", @"https://api.zeropush.com/subscribe").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\",\"channel\":\"player-1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"channel\":\"player-1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
 
                 [zeroPush unsubscribeFromChannel:@"player-1"];
                 [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
@@ -205,8 +211,9 @@ describe(@"ZeroPush", ^{
 
             it(@"should call the error selector if an error occured", ^{
                 stubRequest(@"DELETE", @"https://api.zeropush.com/subscribe").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\",\"channel\":\"player-1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}").
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"channel\":\"player-1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}").
                 andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
 
                 [zeroPush unsubscribeFromChannel:@"player-1"];
@@ -217,16 +224,18 @@ describe(@"ZeroPush", ^{
         context(@"unsubscribeFromAllChannels", ^{
             it(@"should remove all channels", ^{
                 stubRequest(@"PUT", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"channel_list\":\"\",\"auth_token\":\"testing\"}");
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"channel_list\":\"\"}");
                 [zeroPush unsubscribeFromAllChannels];
                 [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
             });
 
             it(@"should call the error selector if an error occured", ^{
                 stubRequest(@"PUT", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"channel_list\":\"\",\"auth_token\":\"testing\"}").
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"channel_list\":\"\"}").
                 andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
 
                 [zeroPush unsubscribeFromAllChannels];
@@ -239,16 +248,14 @@ describe(@"ZeroPush", ^{
                 __block NSArray *fetchedChannels = nil;
 
                 stubRequest(@"GET", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\"}").
+                withHeaders(@{@"Authorization": @"Token token=\"testing\""}).
                 andReturn(200).
                 withBody(@"{\"channels\":[\"player-1\"]}");
 
                 [zeroPush getChannels:^(NSArray *channels, NSError *error) {
                     fetchedChannels = channels;
                 }];
-
-                [[expectFutureValue(fetchedChannels) shouldEventually] haveCountOf:1];
+                [[expectFutureValue(fetchedChannels) shouldEventually] equal:@[@"player-1"]];
             });
 
             it(@"should invoke the callback with an error", ^{
@@ -256,8 +263,7 @@ describe(@"ZeroPush", ^{
                 __block NSError *requestError = nil;
 
                 stubRequest(@"GET", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\"}").
+                withHeaders(@{@"Authorization": @"Token token=\"testing\""}).
                 andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
 
                 [zeroPush getChannels:^(NSArray *channels, NSError *error) {
@@ -272,8 +278,9 @@ describe(@"ZeroPush", ^{
         context(@"setChannels", ^{
             it(@"should make a request to set channels", ^{
                 stubRequest(@"PUT", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"channel_list\":\"player-1,game-12\",\"auth_token\":\"testing\"}");
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"channel_list\":\"player-1,game-12\"}");
 
                 [zeroPush setChannels:@[@"player-1", @"game-12"]];
                 [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
@@ -281,8 +288,9 @@ describe(@"ZeroPush", ^{
 
             it(@"should call the error selector if an error occured", ^{
                 stubRequest(@"PUT", @"https://api.zeropush.com/devices/1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"channel_list\":\"player-1,game-12\",\"auth_token\":\"testing\"}").
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"channel_list\":\"player-1,game-12\"}").
                 andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
                 [zeroPush setChannels:@[@"player-1", @"game-12"]];
                 [[expectFutureValue(application) shouldEventually] receive:@selector(subscribeDidFailWithError:)];
@@ -292,8 +300,9 @@ describe(@"ZeroPush", ^{
         context(@"setBadge", ^{
             it(@"should make a request to set badge", ^{
                 stubRequest(@"POST", @"https://api.zeropush.com/set_badge").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\",\"badge\":\"1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"badge\":\"1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
 
                 [zeroPush setBadge:1];
                 [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
@@ -301,8 +310,9 @@ describe(@"ZeroPush", ^{
 
             it(@"should call the error selector if an error occured", ^{
                 stubRequest(@"POST", @"https://api.zeropush.com/set_badge").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\",\"badge\":\"1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}").
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"badge\":\"1\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}").
                 andFailWithError([NSError errorWithDomain:@"com.zeropush.api" code:401 userInfo:nil]);
                 [zeroPush setBadge:1];
                 [[expectFutureValue(application) shouldEventually] receive:@selector(setBadgeDidFailWithError:)];
@@ -312,8 +322,9 @@ describe(@"ZeroPush", ^{
         context(@"resetBadge", ^{
             it(@"should make a request to set the badge to 0", ^{
                 stubRequest(@"POST", @"https://api.zeropush.com/set_badge").
-                withHeaders(@{ @"Content-Type": @"application/json" }).
-                withBody(@"{\"auth_token\":\"testing\",\"badge\":\"0\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"badge\":\"0\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
                 [zeroPush resetBadge];
                 [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
             });

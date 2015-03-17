@@ -3,7 +3,7 @@
 //  ZeroPush-iOS
 //
 //  Created by Stefan Natchev on 2/5/13.
-//  Copyright (c) 2014 SymmetricInfinity. All rights reserved.
+//  Copyright (c) 2015 SymmetricInfinity. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -78,6 +78,9 @@
 - (void)unsubscribeFromChannel:(NSString *)channel;
 
 - (void)unsubscribeFromAllChannels;
+
+
+- (void)getDevice:(void (^)(NSDictionary *device, NSError *error)) callback;
 
 /**
  * return a list of all the channels to which the device is subscribed

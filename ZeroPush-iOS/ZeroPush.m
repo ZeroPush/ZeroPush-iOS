@@ -3,7 +3,7 @@
 //  ZeroPush-iOS
 //
 //  Created by Stefan Natchev on 2/5/13.
-//  Copyright (c) 2014 SymmetricInfinity. All rights reserved.
+//  Copyright (c) 2015 SymmetricInfinity. All rights reserved.
 //
 
 #import "ZeroPush.h"
@@ -115,8 +115,7 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.4";
 
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:self.deviceToken forKey:@"device_token"];
-    [params setObject:self.apiKey forKey:@"auth_token"];
-    
+
     if (channel) {
         [params setObject:channel forKey:@"channel"];
     }
@@ -170,7 +169,6 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.4";
     // tell the api the badge has been reset
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:self.deviceToken forKey:@"device_token"];
-    [params setObject:self.apiKey forKey:@"auth_token"];
     [params setObject:[NSString stringWithFormat:@"%ld", (long)badge] forKey:@"badge"];
 
     NSString *url = [NSString stringWithFormat:@"%@/set_badge", ZeroPushAPIURLHost];
@@ -190,7 +188,6 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.4";
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:self.deviceToken forKey:@"device_token"];
-    [params setObject:self.apiKey forKey:@"auth_token"];
     [params setObject:channel forKey:@"channel"];
 
     NSString *url = [NSString stringWithFormat:@"%@/subscribe", ZeroPushAPIURLHost];
@@ -205,7 +202,6 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.4";
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:self.deviceToken forKey:@"device_token"];
-    [params setObject:self.apiKey forKey:@"auth_token"];
     [params setObject:channel forKey:@"channel"];
 
     NSString *url = [NSString stringWithFormat:@"%@/subscribe", ZeroPushAPIURLHost];
@@ -218,39 +214,62 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.4";
 
 -(void)unsubscribeFromAllChannels
 {
+    if ([self.deviceToken length] == 0) {
+        NSLog(@"ZeroPush-iOS: Cannot call %s before having a deviceToken", __PRETTY_FUNCTION__);
+        return;
+    }
     NSString *url = [NSString stringWithFormat:@"%@/devices/%@", ZeroPushAPIURLHost, self.deviceToken];
 
     [self HTTPRequest:@"PUT"
                   url:url
-               params:@{@"auth_token": self.apiKey, @"channel_list": @""}
+               params:@{@"channel_list": @""}
         errorSelector:@selector(unsubscribeDidFailWithError:)];
 }
 
-- (void)getChannels:(void (^)(NSArray *channels, NSError *error)) callback
+
+- (void)getDevice:(void (^)(NSDictionary *device, NSError *error))callback
 {
+    if ([self.deviceToken length] == 0) {
+        NSLog(@"ZeroPush-iOS: Cannot call %s before having a deviceToken", __PRETTY_FUNCTION__);
+        return;
+    }
     NSString *url = [NSString stringWithFormat:@"%@/devices/%@", ZeroPushAPIURLHost, self.deviceToken];
 
     [self HTTPRequest:@"GET"
                   url:url
-               params:@{@"auth_token": self.apiKey}
     completionHandler:^(NSHTTPURLResponse *response, NSData *data, NSError *connectionError) {
         if(connectionError) {
             return callback(nil, connectionError);
         }
 
         NSError *error;
-        NSArray *channels = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-        callback(channels, error);
+        NSDictionary *device = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+        return callback(device, error);
+    }];
+}
+
+- (void)getChannels:(void (^)(NSArray *channels, NSError *error)) callback
+{
+    [self getDevice:^(NSDictionary *device, NSError *error) {
+        NSArray *channels = nil;
+        if (device) {
+            channels = [device objectForKey:@"channels"];
+        }
+        return callback(channels, error);
     }];
 }
 
 -(void)setChannels:(NSArray *)channels
 {
+    if ([self.deviceToken length] == 0) {
+        NSLog(@"ZeroPush-iOS: Cannot call %s before having a deviceToken", __PRETTY_FUNCTION__);
+        return;
+    }
     NSString *url = [NSString stringWithFormat:@"%@/devices/%@", ZeroPushAPIURLHost, self.deviceToken];
 
     [self HTTPRequest:@"PUT"
                   url:url
-               params:@{@"auth_token": self.apiKey, @"channel_list": [channels componentsJoinedByString:@","]}
+               params:@{@"channel_list": [channels componentsJoinedByString:@","]}
         errorSelector:@selector(subscribeDidFailWithError:)];
 }
 
@@ -263,6 +282,12 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.4";
 
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:url]];
     request.HTTPMethod = verb;
+
+    if(self.apiKey != nil && [self.apiKey length] > 0)
+    {
+        NSString *tokenValue = [NSString stringWithFormat:@"Token token=\"%@\"", self.apiKey];
+        [request setValue:tokenValue forHTTPHeaderField:@"Authorization"];
+    }
 
     if (params != nil)
     {
