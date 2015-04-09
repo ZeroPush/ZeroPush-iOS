@@ -69,9 +69,9 @@
 - (void)registerDeviceToken:(NSData *)deviceToken channel:(NSString *)channel;
 
 /**
- * Unregister the device's token from ZeroPush
+ * Unregister the previously registered device token from ZeroPush
  */
-- (void)unregisterDeviceToken:(NSData *)deviceToken;
+- (void)unregisterDeviceToken;
 
 /**
  * Subscribe the device's token to a broadcast channel

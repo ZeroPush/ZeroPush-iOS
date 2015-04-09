@@ -129,7 +129,7 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.5";
 }
 
 
-- (void)unregisterDeviceToken:(NSData *)deviceToken
+- (void)unregisterDeviceToken
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     [params setObject:self.deviceToken forKey:@"device_token"];

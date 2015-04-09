@@ -342,7 +342,7 @@ describe(@"ZeroPush", ^{
                                @"Authorization": @"Token token=\"testing\""}).
                 withBody(@"{\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
 
-                [zeroPush unregisterDeviceToken:deviceToken];
+                [zeroPush unregisterDeviceToken];
                 [[[zeroPush deviceToken] should] beEmpty];
                 [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
             });
