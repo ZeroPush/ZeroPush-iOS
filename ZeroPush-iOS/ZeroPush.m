@@ -128,6 +128,23 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.5";
         errorSelector:@selector(tokenRegistrationDidFailWithError:)];
 }
 
+
+- (void)unregisterDeviceToken:(NSData *)deviceToken
+{
+    NSMutableDictionary *params = [NSMutableDictionary dictionary];
+    [params setObject:self.deviceToken forKey:@"device_token"];
+    
+    
+    NSString *url = [NSString stringWithFormat:@"%@/unregister", ZeroPushAPIURLHost];
+
+    [self HTTPRequest:@"DELETE"
+                  url:url
+               params:params
+        errorSelector:@selector(tokenUnregistrationDidFailWithError:)];
+    
+    self.deviceToken = @"";
+}
+
 - (NSString *)deviceToken
 {
     if (_deviceToken == nil) {

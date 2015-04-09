@@ -12,6 +12,7 @@
 
 @interface TestApplication : NSObject<ZeroPushDelegate>
 - (void)tokenRegistrationDidFailWithError:(NSError *)error;
+- (void)tokenUnregistrationDidFailWithError:(NSError *)error;
 - (void)subscribeDidFailWithError:(NSError *)error;
 - (void)unsubscribeDidFailWithError:(NSError *)error;
 - (void)setBadgeDidFailWithError:(NSError *)error;
@@ -21,6 +22,10 @@
 -(void)tokenRegistrationDidFailWithError:(NSError *)error
 {
     NSLog(@"Token registration failed");
+}
+-(void)tokenUnregistrationDidFailWithError:(NSError *)error
+{
+    NSLog(@"Token unregistration failed");
 }
 -(void)subscribeDidFailWithError:(NSError *)error
 {
@@ -326,6 +331,19 @@ describe(@"ZeroPush", ^{
                                @"Authorization": @"Token token=\"testing\""}).
                 withBody(@"{\"badge\":\"0\",\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
                 [zeroPush resetBadge];
+                [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
+            });
+        });
+        
+        context(@"unregisterDeviceToken", ^{
+            it(@"should unregister a device token", ^{
+                stubRequest(@"DELETE", @"https://api.zeropush.com/unregister").
+                withHeaders(@{ @"Content-Type": @"application/json",
+                               @"Authorization": @"Token token=\"testing\""}).
+                withBody(@"{\"device_token\":\"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef\"}");
+
+                [zeroPush unregisterDeviceToken:deviceToken];
+                [[[zeroPush deviceToken] should] beEmpty];
                 [[expectFutureValue(zeroPush.lastResponse) shouldEventually] beNonNil];
             });
         });
