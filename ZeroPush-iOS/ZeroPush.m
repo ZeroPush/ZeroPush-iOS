@@ -9,7 +9,7 @@
 #import "ZeroPush.h"
 
 static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
-static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.0.5";
+static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.0";
 
 @interface ZeroPush ()
 
