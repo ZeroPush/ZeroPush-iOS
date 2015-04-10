@@ -13,6 +13,7 @@
 @optional
 
 - (void)tokenRegistrationDidFailWithError:(NSError *)error;
+- (void)tokenUnregistrationDidFailWithError:(NSError *)error;
 - (void)subscribeDidFailWithError:(NSError *)error;
 - (void)unsubscribeDidFailWithError:(NSError *)error;
 - (void)setBadgeDidFailWithError:(NSError *)error;
@@ -66,6 +67,11 @@
  * Register the device's token with ZeroPush and subscribe the device's token to a broadcast channel
  */
 - (void)registerDeviceToken:(NSData *)deviceToken channel:(NSString *)channel;
+
+/**
+ * Unregister the previously registered device token from ZeroPush
+ */
+- (void)unregisterDeviceToken;
 
 /**
  * Subscribe the device's token to a broadcast channel
