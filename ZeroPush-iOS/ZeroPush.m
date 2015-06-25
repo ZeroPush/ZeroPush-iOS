@@ -71,7 +71,10 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.0";
 
 - (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
 {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
+#pragma clang diagnostic pop
 }
 
 - (void)registerForRemoteNotifications
@@ -82,7 +85,10 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.0";
         [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
     } else {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
+#pragma clang diagnostic pop
     }
 #else
     [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
