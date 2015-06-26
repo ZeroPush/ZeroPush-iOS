@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		379E66BE1B3D3CB4009B6AF3 /* ZeroPush.h in Headers */ = {isa = PBXBuildFile; fileRef = 56F0929A16E64FC300C7BBDD /* ZeroPush.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		379E66BF1B3D3CC4009B6AF3 /* ZeroPush.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F0929C16E64FC300C7BBDD /* ZeroPush.m */; };
+		379E66C11B3D3D76009B6AF3 /* ZeroPush-iOS-Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = 56F0929916E64FC300C7BBDD /* ZeroPush-iOS-Prefix.pch */; };
+		379E66C21B3D3DA3009B6AF3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F0929516E64FC300C7BBDD /* Foundation.framework */; };
+		379E66C31B3D3DA8009B6AF3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5628F0F416E6536300E504A2 /* UIKit.framework */; };
 		3BE9693F0DA14AB6BC3AC158 /* libPods-ZeroPush-iOS Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F3643AE1BC094FDD95725C55 /* libPods-ZeroPush-iOS Tests.a */; };
 		5628F0F516E6536300E504A2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5628F0F416E6536300E504A2 /* UIKit.framework */; };
 		56F0929616E64FC300C7BBDD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56F0929516E64FC300C7BBDD /* Foundation.framework */; };
@@ -45,6 +50,8 @@
 
 /* Begin PBXFileReference section */
 		0DC84CD4355CFB169F36B029 /* Pods-ZeroPush-iOS Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZeroPush-iOS Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZeroPush-iOS Tests/Pods-ZeroPush-iOS Tests.release.xcconfig"; sourceTree = "<group>"; };
+		379E66A51B3D3B8B009B6AF3 /* ZeroPush.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZeroPush.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		379E66A81B3D3B8B009B6AF3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = "ZeroPush-iOS/Info.plist"; sourceTree = SOURCE_ROOT; };
 		5628F0F416E6536300E504A2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		56F0929216E64FC300C7BBDD /* libZeroPush-iOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libZeroPush-iOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56F0929516E64FC300C7BBDD /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -63,6 +70,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		379E66A11B3D3B8B009B6AF3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				379E66C31B3D3DA8009B6AF3 /* UIKit.framework in Frameworks */,
+				379E66C21B3D3DA3009B6AF3 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		56F0928F16E64FC300C7BBDD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -111,6 +127,7 @@
 			children = (
 				56F0929216E64FC300C7BBDD /* libZeroPush-iOS.a */,
 				F846088819C35A50006D19DF /* ZeroPush-iOS Tests.xctest */,
+				379E66A51B3D3B8B009B6AF3 /* ZeroPush.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,6 +157,7 @@
 		56F0929816E64FC300C7BBDD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				379E66A81B3D3B8B009B6AF3 /* Info.plist */,
 				56F0929916E64FC300C7BBDD /* ZeroPush-iOS-Prefix.pch */,
 			);
 			name = "Supporting Files";
@@ -166,7 +184,37 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		379E66A21B3D3B8B009B6AF3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				379E66BE1B3D3CB4009B6AF3 /* ZeroPush.h in Headers */,
+				379E66C11B3D3D76009B6AF3 /* ZeroPush-iOS-Prefix.pch in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		379E66A41B3D3B8B009B6AF3 /* ZeroPush-iOS Framework */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 379E66BC1B3D3B8B009B6AF3 /* Build configuration list for PBXNativeTarget "ZeroPush-iOS Framework" */;
+			buildPhases = (
+				379E66A01B3D3B8B009B6AF3 /* Sources */,
+				379E66A11B3D3B8B009B6AF3 /* Frameworks */,
+				379E66A21B3D3B8B009B6AF3 /* Headers */,
+				379E66A31B3D3B8B009B6AF3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "ZeroPush-iOS Framework";
+			productName = "ZeroPush-iOS Framework";
+			productReference = 379E66A51B3D3B8B009B6AF3 /* ZeroPush.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		56F0929116E64FC300C7BBDD /* ZeroPush-iOS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 56F092A016E64FC300C7BBDD /* Build configuration list for PBXNativeTarget "ZeroPush-iOS" */;
@@ -213,6 +261,9 @@
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = ZeroPush;
 				TargetAttributes = {
+					379E66A41B3D3B8B009B6AF3 = {
+						CreatedOnToolsVersion = 6.3.2;
+					};
 					F846088719C35A50006D19DF = {
 						TestTargetID = 56F0929116E64FC300C7BBDD;
 					};
@@ -232,11 +283,19 @@
 			targets = (
 				56F0929116E64FC300C7BBDD /* ZeroPush-iOS */,
 				F846088719C35A50006D19DF /* ZeroPush-iOS Tests */,
+				379E66A41B3D3B8B009B6AF3 /* ZeroPush-iOS Framework */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		379E66A31B3D3B8B009B6AF3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		F846088619C35A50006D19DF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -281,6 +340,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		379E66A01B3D3B8B009B6AF3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				379E66BF1B3D3CC4009B6AF3 /* ZeroPush.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		56F0928E16E64FC300C7BBDD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -320,6 +387,84 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		379E66B81B3D3B8B009B6AF3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/ZeroPush-iOS/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = ZeroPush;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		379E66B91B3D3B8B009B6AF3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/ZeroPush-iOS/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = ZeroPush;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		56F0929E16E64FC300C7BBDD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -463,6 +608,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		379E66BC1B3D3B8B009B6AF3 /* Build configuration list for PBXNativeTarget "ZeroPush-iOS Framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				379E66B81B3D3B8B009B6AF3 /* Debug */,
+				379E66B91B3D3B8B009B6AF3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		56F0928D16E64FC300C7BBDD /* Build configuration list for PBXProject "ZeroPush-iOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
