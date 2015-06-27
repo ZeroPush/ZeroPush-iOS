@@ -345,7 +345,9 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.0";
     [self HTTPRequest:verb url:url params:params completionHandler:^(NSHTTPURLResponse *response, NSData *data, NSError *error) {
 
         if (![self.delegate respondsToSelector:errorSelector]) {
-            NSLog(@"ZeroPush-iOS: %@", [error description]);
+            if (error) {
+                NSLog(@"ZeroPush-iOS: %@", [error description]);
+            }
             return;
         }
         if (error) {
