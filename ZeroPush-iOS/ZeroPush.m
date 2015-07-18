@@ -69,11 +69,6 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.0";
     return self;
 }
 
-- (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
-{
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
-}
-
 - (void)registerForRemoteNotifications
 {
 #ifdef __IPHONE_8_0
@@ -81,12 +76,12 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.0";
         UIUserNotificationSettings* notificationSettings = [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound) categories:nil];
         [[UIApplication sharedApplication] registerUserNotificationSettings:notificationSettings];
         [[UIApplication sharedApplication] registerForRemoteNotifications];
-    } else {
+    }
+    else
+#endif
+    {
         [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
     }
-#else
-    [[UIApplication sharedApplication] registerForRemoteNotificationTypes: (UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert)];
-#endif
 }
 
 - (NSDictionary *)userInfoForData:(id)data andResponse:(NSHTTPURLResponse *)response
