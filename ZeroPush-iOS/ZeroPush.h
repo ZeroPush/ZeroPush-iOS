@@ -51,7 +51,7 @@
  * A convenience wrapper for [[UIApplication sharedApplication] registerForRemoteNotificationTypes:types];
  * deprecated in iOS7
  */
-- (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types;
+- (void)registerForRemoteNotificationTypes:(UIRemoteNotificationType)types NS_DEPRECATED_IOS(3_0, 8_0, "Please use registerForRemoteNotifications instead");
 
 /**
  * Preferred method for registering for notifications. Backwards compatible with iOS7
