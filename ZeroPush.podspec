@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
   s.name         = "ZeroPush"
-  s.version      = "2.1.0"
+  s.version      = "2.1.1"
   s.summary      = "ZeroPush is a lightweight wrapper for the ZeroPush API."
   s.homepage     = "https://zeropush.com"
   s.license      = 'MIT'
   s.authors      = { "Adam Duke" => "adam.v.duke@gmail.com", "Stefan Natchev" => "stefan.natchev@gmail.com" }
-  s.source       = { :git => "https://github.com/ZeroPush/ZeroPush-iOS.git", :tag => "2.1.0" }
+  s.source       = { :git => "https://github.com/ZeroPush/ZeroPush-iOS.git", :tag => "2.1.1" }
   s.platform     = :ios, '6.0'
   s.source_files = 'ZeroPush-iOS/*.{h,m}'
   s.frameworks   = 'Foundation', 'UIKit'
