@@ -53,11 +53,12 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.0";
 
 + (NSString *)deviceTokenFromData:(NSData *)tokenData
 {
-    NSString *token = [tokenData description];
-    token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
-    token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
-    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    return token;
+    const unsigned *tokenBytes = [tokenData bytes];
+    NSString *hexToken = [NSString stringWithFormat:@"%08x%08x%08x%08x%08x%08x%08x%08x",
+                          ntohl(tokenBytes[0]), ntohl(tokenBytes[1]), ntohl(tokenBytes[2]),
+                          ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
+                          ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
+    return hexToken;
 }
 
 -(id)init {
