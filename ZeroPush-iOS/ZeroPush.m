@@ -53,11 +53,23 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.0";
 
 + (NSString *)deviceTokenFromData:(NSData *)tokenData
 {
-    NSString *token = [tokenData description];
-    token = [token stringByReplacingOccurrencesOfString:@"<" withString:@""];
-    token = [token stringByReplacingOccurrencesOfString:@">" withString:@""];
-    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
-    return token;
+    if (tokenData == nil) {
+        return nil;
+    }
+
+    // our token should not be very big. This is a reasonable upper limit.
+    if (tokenData.length >= 1024) {
+        return nil;
+    }
+
+    NSMutableString *deviceToken = [NSMutableString stringWithCapacity:([tokenData length] * 2)];
+    const unsigned char *bytes = (const unsigned char *)[tokenData bytes];
+
+    for (NSUInteger i = 0; i < [tokenData length]; i++) {
+        [deviceToken appendFormat:@"%02x", bytes[i]];
+    }
+
+    return [NSString stringWithString:deviceToken];
 }
 
 -(id)init {
