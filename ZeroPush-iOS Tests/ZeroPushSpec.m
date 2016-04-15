@@ -109,6 +109,22 @@ describe(@"ZeroPush", ^{
     });
 
     context(@"engageWithAPIKey", ^{
+        it(@"returns a string representation of device token data", ^{
+            [[[ZeroPush deviceTokenFromData:deviceToken] should] equal: @"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"];
+        });
+        it(@"returns nil if the device token data is nil", ^{
+            [[[ZeroPush deviceTokenFromData:nil] should] beNil];
+        });
+        it(@"returns nil if the device token data is longer than 1024 bytes", ^{
+            NSMutableData *data = [NSMutableData dataWithData:deviceToken];
+            for(int i = 0; i < 35; i++){
+                [data appendData:deviceToken];
+            }
+            [[[ZeroPush deviceTokenFromData:data] should] beNil];
+        });
+    });
+
+    context(@"engageWithAPIKey", ^{
         it(@"should initialize the shared instance", ^{
             [ZeroPush engageWithAPIKey:@"testing"];
             [[[ZeroPush shared].apiKey should] equal:@"testing"];
