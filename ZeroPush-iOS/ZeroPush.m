@@ -15,7 +15,6 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.2";
 @interface ZeroPush ()
 
 @property (nonatomic, strong)NSHTTPURLResponse *lastResponse;
-@property (nonatomic, strong)NSOperationQueue *operationQueue;
 
 - (void)HTTPRequest:(NSString *) verb url:(NSString *)url params:(NSDictionary *)params completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler;
 - (void)HTTPRequest:(NSString *) verb url:(NSString *)url completionHandler:(void (^)(NSHTTPURLResponse* response, NSData* data, NSError* connectionError)) handler;
@@ -28,7 +27,6 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.2";
 @synthesize delegate = _delegate;
 @synthesize deviceToken = _deviceToken;
 @synthesize lastResponse = _lastResponse;
-@synthesize operationQueue = _operationQueue;
 
 + (ZeroPush *)shared
 {
@@ -75,10 +73,6 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.2";
 
 -(id)init {
     self = [super init];
-    if (self) {
-        _operationQueue = [[NSOperationQueue alloc] init];
-    }
-
     return self;
 }
 
@@ -337,13 +331,18 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.2";
         [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     }
 
-    [NSURLConnection sendAsynchronousRequest:request
-                                       queue:self.operationQueue
-                           completionHandler:^(NSURLResponse *urlResponse, NSData *data, NSError *error) {
-                               NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) urlResponse;
-                               handler(httpResponse, data, error);
-                               self.lastResponse = httpResponse;
-                           }];
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+            handler(httpResponse, data, error);
+            self.lastResponse = httpResponse;
+        });
+    }];
+
+    [task resume];
 }
 
 -(void)HTTPRequest:(NSString *)verb url:(NSString *)url completionHandler:(void (^)(NSHTTPURLResponse *, NSData *, NSError *))handler
@@ -369,7 +368,7 @@ static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.2";
         }
         NSInteger statusCode = [response statusCode];
 
-        //if 300, we need to manually follow redirects
+        // if 300, we need to manually follow redirects
         
         if (statusCode >= 400) {
             NSDictionary *userInfo = [self userInfoForData:data andResponse:response];
