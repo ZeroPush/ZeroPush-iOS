@@ -8,7 +8,6 @@
 
 #import "ZeroPush.h"
 
-//static NSString *const ZeroPushAPIURLHost = @"https://api.zeropush.com";
 static NSString *const ZeroPushAPIURLHost = @"https://zeropush.pushwoosh.com";
 static NSString *const ZeroPushClientVersion = @"ZeroPush-iOS/2.1.2";
 
